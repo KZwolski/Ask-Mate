@@ -138,8 +138,9 @@ def register_user(cursor: RealDictCursor, user_details: dict):
 @connection.connection_handler  # IN PROGRESS ~~SEBA
 def check_if_user_exists(cursor: RealDictCursor, username, email):
     query = '''
-        SELECT * FROM users
-        WHERE username = %(username) OR email = %(email)s
+        SELECT username, email 
+        FROM users 
+        WHERE EXISTS (SELECT username, email FROM users WHERE username = %(username)s OR email = %(email)s)
         '''
     cursor.execute(query, {'username': username, 'email': email})
-    return cursor.fetchall()
+    return cursor.fetchone()

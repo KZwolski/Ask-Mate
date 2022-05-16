@@ -7,6 +7,7 @@ import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static\\images'
+app.secret_key = 'dupa'
 
 FILE = "data/question.csv"
 answer_path = "data/answer.csv"
@@ -110,7 +111,7 @@ def delete_answer(answer_id):
 @app.route("/register")
 def register_page():
     if 'user' in session:
-        flash('You need to log out first!')
+        flash('You need to log out first!')  # TO BE CHANGED INTO JS
         return redirect('/')
     else:
         return render_template('register.html')
@@ -123,8 +124,12 @@ def register_user():
     user_details['email'] = request.form['register-email']
     user_details['password'] = util.hash_password(request.form['register-password'])
     user_details['registration_date'] = util.get_current_time()
-    data_manager.register_user(user_details)
-    return redirect(url_for('index'))
+    if data_manager.check_if_user_exists(user_details['username'], user_details['email']):
+        flash('Username or Email already exists!')  # TO BE CHANGED INTO JS
+        return redirect(url_for('register_page'))
+    else:
+        data_manager.register_user(user_details)
+        return redirect(url_for('index'))
 
 
 @app.route("/bonus-questions")
