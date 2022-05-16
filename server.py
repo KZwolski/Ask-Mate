@@ -105,9 +105,17 @@ def delete_answer(answer_id):
 
     return redirect("/list")
 
+
 @app.route("/bonus-questions")
 def main():
     return render_template('bonus_questions.html', questions=SAMPLE_QUESTIONS)
+
+
+@app.route("/users")
+def users_list():
+    users_details = data_manager.get_users_details()
+    return render_template("users.html", users_details=users_details)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',
