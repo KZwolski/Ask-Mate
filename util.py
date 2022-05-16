@@ -1,10 +1,20 @@
 import connection
 from datetime import datetime, timezone
-import time
+import bcrypt
 
 
 question_path = "data/question.csv"
 answer_path = "data/answer.csv"
+
+
+def hash_password(plain_text_password):
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
 
 
 def sort_answers_by_timestamp():
@@ -24,11 +34,3 @@ def get_current_time():
     value = datetime.utcfromtimestamp(current_time)
     date_format = f"{value:%Y-%m-%d %H:%M:%S}"
     return date_format
-
-
-def generate_new_id(filename):
-    with open(filename, 'r') as file:
-        last_id = int(file.read())
-    with open(filename, 'w') as file:
-        file.write(str(last_id + 1))
-    return last_id + 1

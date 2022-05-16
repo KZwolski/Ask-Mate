@@ -124,3 +124,22 @@ def delete_answer(cursor: RealDictCursor, id_to_delete):
         '''
     value = {'id_to_delete': id_to_delete}
     cursor.execute(query, value)
+
+
+@connection.connection_handler  # IN PROGRESS ~~SEBA
+def register_user(cursor: RealDictCursor, user_details: dict):
+    query = '''
+        INSERT INTO users(username, password, email, registration_date, admin, reputation)
+        VALUES (%(username)s, %(password)s, %(email)s, %(registration_date)s, false, 0)
+        '''
+    cursor.execute(query, user_details)
+
+
+@connection.connection_handler  # IN PROGRESS ~~SEBA
+def check_if_user_exists(cursor: RealDictCursor, username, email):
+    query = '''
+        SELECT * FROM users
+        WHERE username = %(username) OR email = %(email)s
+        '''
+    cursor.execute(query, {'username': username, 'email': email})
+    return cursor.fetchall()

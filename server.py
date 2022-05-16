@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.utils import secure_filename
 from bonus_questions import SAMPLE_QUESTIONS
 import data_manager
+import util
 import os
 
 app = Flask(__name__)
@@ -105,9 +106,31 @@ def delete_answer(answer_id):
 
     return redirect("/list")
 
+
+@app.route("/register")
+def register_page():
+    if 'user' in session:
+        flash('You need to log out first!')
+        return redirect('/')
+    else:
+        return render_template('register.html')
+
+
+@app.route("/register", methods=['POST'])
+def register_user():
+    user_details = dict()
+    user_details['username'] = request.form['register-username']
+    user_details['email'] = request.form['register-email']
+    user_details['password'] = util.hash_password(request.form['register-password'])
+    user_details['registration_date'] = util.get_current_time()
+    data_manager.register_user(user_details)
+    return redirect(url_for('index'))
+
+
 @app.route("/bonus-questions")
 def main():
     return render_template('bonus_questions.html', questions=SAMPLE_QUESTIONS)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',
