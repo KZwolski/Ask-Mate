@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask mate</title>
+     <style>
+        body {
+            background-color: lightblue;
+            text-align: center;
+            }
+	</style>
+</head>
+<body>
+    <h1>Users list</h1>
+
+    <table>
+            <thead>
+                <tr>
+                    <td>Username</td>
+                    <td>password</td>
+                    <td>email</td>
+                    <td>is admin</td>
+                    <td>registration date</td>
+                    <td>Reputation</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in users_details %}
+                    <tr>
+                        <td>{{ r['username'] }}</td>
+                        <td>{{ r['password'] }}</td>
+                        <td>{{ r['email'] }}</td>
+                        <td>{{ r['admin'] }}</td>
+                        <td>{{ r['registration_date'] }}</td>
+                        <td>{{ r['reputation'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+    </table>
+
+</body>
+</html>

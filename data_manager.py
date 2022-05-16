@@ -144,3 +144,13 @@ def check_if_user_exists(cursor: RealDictCursor, username, email):
         '''
     cursor.execute(query, {'username': username, 'email': email})
     return cursor.fetchone()
+
+
+@connection.connection_handler
+def get_users_details(cursor):
+    query = """
+        SELECT username, password, email, admin, registration_date, reputation
+        FROM users
+        ORDER BY username"""
+    cursor.execute(query)
+    return cursor.fetchall()
