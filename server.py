@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.utils import secure_filename
 from bonus_questions import SAMPLE_QUESTIONS
 import data_manager
 import os
+import util
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static\\images'
+app.secret_key = "dupa"
 
 FILE = "data/question.csv"
 answer_path = "data/answer.csv"
@@ -115,6 +117,27 @@ def main():
 def users_list():
     users_details = data_manager.get_users_details()
     return render_template("users.html", users_details=users_details)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    users = data_manager.get_users_details()
+    if request.method == 'POST':
+        for user in users:
+            if request.form['username'] == user['username'] and util.verify_password(request.form['password'],
+                                                                                     user['password']):
+                session["user"] = request.form['username']
+                return redirect("/")
+            else:
+                error = "Invalid login attempt"
+    return render_template('login.html', error=error)
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session.pop("user", None)
+    return redirect(url_for("index"))
 
 
 if __name__ == '__main__':

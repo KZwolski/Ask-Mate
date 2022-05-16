@@ -2,7 +2,7 @@ python-dotenv
 psycopg2-binary
 click==8.1.2
 colorama==0.4.4
-Flask==2.1.2
+Flask~=2.1.1
 importlib-metadata==4.11.3
 itsdangerous==2.1.2
 Jinja2==3.1.2
@@ -11,3 +11,5 @@ psycopg2==2.9.3
 Werkzeug==2.1.1
 zipp==3.8.0
 
+
+bcrypt~=3.2.2

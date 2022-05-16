@@ -1,7 +1,7 @@
 import connection
 from datetime import datetime, timezone
 import time
-
+import bcrypt
 
 question_path = "data/question.csv"
 answer_path = "data/answer.csv"
@@ -32,3 +32,14 @@ def generate_new_id(filename):
     with open(filename, 'w') as file:
         file.write(str(last_id + 1))
     return last_id + 1
+
+
+def hash_password(plain_text_password):
+    # By using bcrypt, the salt is saved into the hash itself
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)

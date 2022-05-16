@@ -15,7 +15,17 @@
 	</style>
 </head>
 <body>
-<h1>Ask Mate</h1>
+{% if "user" in session %}
+            <h1>Welcome {{session["user"]}}, to ASK MATE!</h1>
+        {%else%}
+            <h1>Welcome to ASK MATE!</h1>
+        {% endif %}
+<form action="/login" method="GET">
+        <button type="submit">Login</button>
+    </form>
+<form action="/logout" method="GET">
+        <button type="submit">Logout</button>
+    </form>
 <a href="/list">Go to the list of questions</a><br><br>
 <a href="/add-question">Ask a question</a><br><br>
 <a href="/users">Users list</a><br><br>
