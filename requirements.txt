@@ -1,0 +1,4 @@
+flask~=2.1.2
+python-dotenv
+psycopg2-binary
+Werkzeug~=2.1.2

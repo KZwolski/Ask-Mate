@@ -124,3 +124,12 @@ def delete_answer(cursor: RealDictCursor, id_to_delete):
         '''
     value = {'id_to_delete': id_to_delete}
     cursor.execute(query, value)
+
+@connection.connection_handler
+def get_users_details(cursor):
+    query = """
+        SELECT username, password, email, admin, registration_date, reputation
+        FROM users
+        ORDER BY username"""
+    cursor.execute(query)
+    return cursor.fetchall()
