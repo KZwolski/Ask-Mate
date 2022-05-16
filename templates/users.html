@@ -17,10 +17,10 @@
             <thead>
                 <tr>
                     <td>Username</td>
-                    <td>Registration date</td>
-                    <td>Number of asked questions</td>
-                    <td>Number of answers</td>
-                    <td>Number of comments</td>
+                    <td>password</td>
+                    <td>email</td>
+                    <td>is admin</td>
+                    <td>registration date</td>
                     <td>Reputation</td>
                 </tr>
             </thead>
@@ -31,7 +31,7 @@
                         <td>{{ r['password'] }}</td>
                         <td>{{ r['email'] }}</td>
                         <td>{{ r['admin'] }}</td>
-                        <td>{{ r['registration_data'] }}</td>
+                        <td>{{ r['registration_date'] }}</td>
                         <td>{{ r['reputation'] }}</td>
                     </tr>
                 {% endfor %}
