@@ -1,13 +1,115 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
+from werkzeug.utils import secure_filename
 from bonus_questions import SAMPLE_QUESTIONS
+import data_manager
+import os
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'static\\images'
 
+FILE = "data/question.csv"
+answer_path = "data/answer.csv"
+FIELDNAMES = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+
+
+@app.route("/")
+def index():
+    last_five = data_manager.get_last_five_questions()
+    return render_template('index.html', last_five=last_five)
+
+
+@app.route("/list", methods=["GET", "POST"])
+def display_list():
+    question_details = data_manager.get_questions()
+    sort_by = request.args.get("order_by")
+    order = request.args.get("order_direction")
+    titles = ['ID', 'Submission Time', 'View Number', 'Vote Number', 'Title']
+    if sort_by:
+        question_details = data_manager.get_questions_sorted(sort_by, order)
+    return render_template('list.html', questions=question_details, titles=titles)
+
+
+@app.route("/search", methods=["GET", "POST"])
+def searched_question():
+    searched = request.args.get("question")
+    search_question = data_manager.search_questions(searched)
+    titles = ['ID', 'Title', 'Message']
+    return render_template('list.html', questions=search_question, titles=titles, searched=searched)
+
+
+@app.route("/question/<question_id>")
+def display_question(question_id: int):
+    question = data_manager.get_a_question(question_id)
+    answers = data_manager.get_answers(question_id)
+    return render_template("display_question.html", question=question, answers=answers)
+
+
+@app.route("/add-question", methods=["GET", "POST"])
+def add_question():
+    header = "Add question"
+    title = "Title"
+    message = "Question"
+    action = "/add-question"
+    if request.method == 'POST':
+        title = request.form['title']
+        question = request.form['question']
+        new_id = data_manager.max_id() + 1
+        image_path = None
+        if request.files['image']:
+            filename = secure_filename(request.files['image'].filename)
+            request.files['image'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            image_path = 'images/%s' % filename
+        data_manager.save_question(new_id, title, question, image_path)
+        return redirect("/list")
+    return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
+
+
+@app.route("/question/<question_id>/delete", methods=["GET"])
+def delete_question(question_id):
+    data_manager.delete_question(question_id)
+    return redirect("/list")
+
+
+@app.route("/question/<question_id>/edit", methods=["GET", "POST"])
+def edit_question(question_id):
+    header = "Edit question"
+    title = "Title"
+    message = "Question"
+    action = f"/question/{question_id}/edit"
+    if request.method == 'POST':
+        title = request.form['title']
+        question = request.form['question']
+        image_path = None
+        if request.files['image']:
+            filename = secure_filename(request.files['image'].filename)
+            request.files['image'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            image_path = 'images/%s' % filename
+        data_manager.edit_question(question_id, title, question, image_path)
+        return redirect(f"/question/{question_id}")
+    return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
+
+
+@app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
+def add_answer(question_id):
+    action = f"/question/{question_id}/new-answer"
+    if request.method == 'POST':
+        message = request.form['message']
+        data_manager.save_answer(question_id, message)
+        return redirect(f"/question/{question_id}")
+    return render_template('add-answer.html', action=action, question_id=question_id)
+
+
+@app.route("/answer/<answer_id>/delete", methods=["GET"])
+def delete_answer(answer_id):
+    data_manager.delete_answer(answer_id)
+
+    return redirect("/list")
 
 @app.route("/bonus-questions")
 def main():
     return render_template('bonus_questions.html', questions=SAMPLE_QUESTIONS)
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0',
+            port=5000,
+            debug=True)

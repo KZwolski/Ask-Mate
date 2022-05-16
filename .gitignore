@@ -1,0 +1,4 @@
+venv/
+sample_data/
+*.xml
+__pycache__/

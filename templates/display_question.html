@@ -1,0 +1,86 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question {{ question_id }}</title>
+        <style>
+            body {
+                background-color: lightblue;
+                text-align: center;
+            }
+            table, th, td {
+                border: 1px solid black;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            p {
+                font-family: verdana;
+                font-size: 20px;
+            }
+            #message span {
+                background-color: white;
+                }
+        </style>
+</head>
+<body>
+<p><a href="/list">Go back to list of questions</a></p>
+<p><a href="/question/{{question.id}}/delete">Delete this question</a></p>
+ <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Submission time</th>
+                    <th>Views</th>
+                    <th>Votes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ question.id }}</td>
+                    <td>{{ question.submission_time }}</td>
+                    <td style="text-align:center;">{{ question.view_number }}</td>
+                    <td style="text-align:center;">{{ question.vote_number }}</td>
+                </tr>
+            </tbody>
+        </table>
+<h2>{{ question.title }}</h2>
+<p>{{ question.message }}</p>
+
+{%  if question.image %}
+    <img src="/static/{{ question.image }}" alt="image" width="300" height="200">
+{% endif %}
+
+
+<br><a href="/question/{{ question.id }}/edit">EDIT question</a><br><br>
+<h3><a href="/question/{{ question.id }}/new-answer">Write an answer</a></h3>
+
+<p>Answers:</p>
+{% if answers==[] %}
+    <h1>There are no answers yet!</h1>
+{% else %}
+    <table>
+        <thead>
+            <tr>
+                <th>Submission time</th>
+                <th>Vote number</th>
+                <th>Answer</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+         {% for answer in answers %}
+             <tr>
+                 <td>{{ answer.submission_time }}</td>
+                 <td style="text-align:center;">{{ answer.vote_number }}</td>
+                 <td> {{ answer.message }}</td>
+                 <td><a href="/answer/{{ answer.id }}/delete",
+                     question_id="{{answer.question_id}}")>DELETE ANSWER</a></td>
+             </tr>
+         {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+
+</body>
+</html>

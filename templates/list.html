@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask Mate</title>
+    <style>
+        body {
+            background-color: lightblue;
+            text-align: center;
+            }
+        p {
+            font-family: verdana;
+            font-size: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            }
+        table,
+        td,th{
+            text-align: center;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Questions</h1>
+    <a href="/">Return to Main Page</a>
+    <br>
+    <a href="/add-question">Ask a Question</a>
+    <br><br>
+    <label><strong>Sort by:&emsp;&emsp;&emsp;Order:</strong><br>
+        <form action="/list">
+            <select name="order_by">
+                    <option value="id" >id</option>
+                    <option value="submission_time" >submission_time</option>
+                    <option value="view_number" >view_number</option>
+                    <option value="vote_number" >vote_number</option>
+                    <option value="title" >title</option>
+            </select>
+            <select name="order_direction">
+                    <option value="ASC" >Ascending</option>
+                    <option value="DESC">Descending</option>
+            </select>
+        <input type="submit" value="Sort"></form>
+    </label>
+    <br><br>
+
+    <table style="width: 100%">
+
+            <tr>
+            {% for title in titles %}
+                <th>{{ title }}</th>
+            {% endfor %}
+            </tr>
+            {% for question in questions %}
+                    <tr>
+                        {% for key, value in question.items() %}
+                            {% if key=="title" %}
+                        <td><a href="/question/{{question.id}}">{{ value }}</a></td>
+                            {% else %}
+                                <td>{{ value }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+        </table>
+
+</body>
+</html>
