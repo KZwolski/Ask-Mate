@@ -61,6 +61,7 @@
     <table>
         <thead>
             <tr>
+                <th>Username</th>
                 <th>Submission time</th>
                 <th>Vote number</th>
                 <th>Answer</th>
@@ -70,6 +71,7 @@
         <tbody>
          {% for answer in answers %}
              <tr>
+                 <td>{{ answer.username }}</td>
                  <td>{{ answer.submission_time }}</td>
                  <td style="text-align:center;">{{ answer.vote_number }}</td>
                  <td> {{ answer.message }}</td>

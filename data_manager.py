@@ -59,20 +59,29 @@ def get_last_five_questions(cursor: RealDictCursor) -> list:
 @connection.connection_handler
 def get_answers(cursor: RealDictCursor, searched_id):
     query = f"""
-        SELECT *
-        FROM answer
-        WHERE question_id = {searched_id}"""
+        SELECT u.username, a.submission_time, a.vote_number, a.message, a.id
+        FROM answer as a
+        INNER JOIN users as u ON a.user_id = u.id
+        WHERE a.question_id = {searched_id}"""
     cursor.execute(query)
     return cursor.fetchall()
 
 
 @connection.connection_handler
-def save_question(cursor: RealDictCursor, new_id, question_title, message, image):
+def save_question(cursor: RealDictCursor, username, question_title, message, image):
     query = '''
-        INSERT INTO question(id, submission_time, view_number, vote_number, title, message, image)
-        VALUES (%(id)s,%(time)s, %(view_n)s, %(vote_n)s, %(title)s, %(message)s, %(image)s)
+        INSERT INTO question(submission_time,  user_id, vote_number, title, message, image)
+        VALUES (
+        %(time)s, 
+        (SELECT u.username FROM users u WHERE u.username = %(username)s),
+        %(view_n)s, 
+        %(vote_n)s, 
+        %(title)s,
+        %(message)s, 
+        %(image)s
+        )
         '''
-    cursor.execute(query, {'id': new_id, 'time': util.get_current_time(), 'view_n': 0, 'vote_n': 0,
+    cursor.execute(query, {'time': util.get_current_time(), 'username': username, 'view_n': 0, 'vote_n': 0,
                            'title': question_title, 'message': message, 'image': image})
 
 
