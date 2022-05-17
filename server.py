@@ -48,6 +48,9 @@ def display_question(question_id: int):
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question():
+    if 'user' not in session:
+        #                                        <---   WE COULD ADD A JS ALERT HERE
+        return redirect(url_for('index'))
     header = "Add question"
     title = "Title"
     message = "Question"
@@ -55,13 +58,13 @@ def add_question():
     if request.method == 'POST':
         title = request.form['title']
         question = request.form['question']
-        new_id = data_manager.max_id() + 1
+        username = session['user']
         image_path = None
         if request.files['image']:
             filename = secure_filename(request.files['image'].filename)
             request.files['image'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
             image_path = 'images/%s' % filename
-        data_manager.save_question(new_id, title, question, image_path)
+        data_manager.save_question(username, title, question, image_path)
         return redirect("/list")
     return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
 
