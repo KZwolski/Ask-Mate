@@ -1,13 +1,11 @@
 {%extends "layout.html"%}
+{% block logo %} <div id="logo"><h1>Questions</h1></div>{% endblock %}
 {%block content%}
-<body>
-    <h1>Questions</h1>
-    <a href="/">Return to Main Page</a>
-    <br>
-    <a href="/add-question">Ask a Question</a>
-    <br><br>
-    <label><strong>Sort by:&emsp;&emsp;&emsp;Order:</strong><br>
+
+
+
         <form action="/list">
+        <h2 style="text-align: center">Sort By:</h2>
             <select name="order_by">
                     <option value="id" >id</option>
                     <option value="submission_time" >submission_time</option>
@@ -19,28 +17,21 @@
                     <option value="ASC" >Ascending</option>
                     <option value="DESC">Descending</option>
             </select>
-        <input type="submit" value="Sort"></form>
-    </label>
+        <input type="submit" id="input3" value="Sort"></form>
+
     <br><br>
 
-    <table style="width: 100%">
 
-            <tr>
-            {% for title in titles %}
-                <th>{{ title }}</th>
-            {% endfor %}
-            </tr>
-            {% for question in questions %}
-                    <tr>
-                        {% for key, value in question.items() %}
-                            {% if key=="title" %}
-                        <td><a href="/question/{{question.id}}">{{ value }}</a></td>
-                            {% else %}
-                                <td>{{ value }}</td>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-        </table>
+
+           {% for question in questions %}
+        <a href=" {{ url_for('display_question', question_id=question.id) }}">
+            <div class="question">
+            <h2>{{ question.id }}.{{question.title}}</h2>
+            <h3>{{question.message}}</h3>
+            <span class="material-symbols-outlined">visibility</span>&ensp;{{question.view_number}}&emsp;
+            <span class="material-symbols-outlined">trending_up</span>&ensp;{{question.vote_number}}&emsp;
+            <span class="material-symbols-outlined">schedule</span>&ensp;{{question.submission_time}}
+        </div></a>
+        {% endfor %}
 
 {%endblock%}

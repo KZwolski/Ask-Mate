@@ -1,31 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Ask Mate</title>
-    <style>
-        body {
-            background-color: lightblue;
-            text-align: center;
-            }
-        p {
-            font-family: verdana;
-            font-size: 20px;
-            }
-        #upload_button {
-            background-color: whitesmoke;
-        }
-    </style>
-</head>
-<body>
-<h2>{{ header }}</h2>
-<a href="/">Go back</a><br><br>
-<form action={{ action }} method="POST" enctype="multipart/form-data">
-    <input type="text" name="title" placeholder={{ old_title }} required><br>
-    <textarea name="question" cols="40" rows="5" placeholder={{ old_question }} required></textarea><br>
-    <input id='upload_button' lang='en' type="file" name="image" accept=".jpeg,.jpg,.png,.gif" id="image" value="upload an image"><br>
-    <label for="image">↑ Upload an image ↑</label><br><br>
-    <input type="submit" value="Submit">
-</form>
-</body>
-</html>
+{%extends "layout.html"%}
+{% block logo %}
+    <div id="logo"><h1>{{ header }}</h1></div>
+{% endblock %}
+
+{%block content%}
+    <div id="window">
+      <form action={{ action }} method="POST" enctype="multipart/form-data">
+          <label>
+              <input type="text" id="input1" name="title" placeholder={{ old_title }} required><br>
+          </label>
+          <textarea name="question" id="input1" cols="40" rows="5" placeholder={{ old_question }} required></textarea><br>
+          <input id='upload_button' lang='en' type="file" name="image" accept=".jpeg,.jpg,.png,.gif" id="image" value="upload an image"><br>
+          <label for="image">↑ Upload an image ↑</label>
+          <input type="submit" id="input2" value="Submit">
+      </form>
+    </div>
+
+
+{%endblock%}

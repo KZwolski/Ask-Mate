@@ -107,6 +107,16 @@ def edit_question(cursor: RealDictCursor, changed_id, question_title, message, i
 
 
 @connection.connection_handler
+def edit_views(cursor: RealDictCursor, changed_id):
+    query = '''
+        UPDATE question
+        SET view_number = view_number +1
+        WHERE id = %(changed_id)s
+        '''
+    cursor.execute(query, {'changed_id': changed_id})
+
+
+@connection.connection_handler
 def save_answer(cursor: RealDictCursor, question_id, message, username):
     query = '''
         INSERT INTO answer(submission_time, user_id, vote_number, question_id, message, image)

@@ -14,7 +14,6 @@ app.secret_key = 'dupa'
 @app.route("/")
 def index():
     last_five = data_manager.get_last_five_questions()
-    users_details = data_manager.get_users_details()
     return render_template('index.html', last_five=last_five)
 
 
@@ -41,6 +40,7 @@ def searched_question():
 def display_question(question_id: int):
     question = data_manager.get_a_question(question_id)
     answers = data_manager.get_answers(question_id)
+    data_manager.edit_views(question_id)
     return render_template("display_question.html", question=question, answers=answers)
 
 

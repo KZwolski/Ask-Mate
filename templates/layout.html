@@ -13,6 +13,7 @@
 
     {%block menu%}
     <div id="menu">
+        <div class="option"><a href="/">Home</a></div>
         <div class="option"><a href="/list">Questions</a></div>
         <div class="option"><a href="/add-question">Ask</a></div>
         <div class="option"><a href="/users">Users</a></div>
@@ -51,17 +52,18 @@
         </div>
         {%endblock%}
     {%block logo%}
-    <a href="/"><div id="logo">
+    <div id="logo">
         {% if "user" in session %}
             <h1>Welcome {{session["user"]}}, to ASK MATE!</h1>
         {%else%}
             <h1>Welcome to ASK MATE!</h1>
         {% endif %}
-    </div></a>
+    </div>
     {%endblock%}
     <div id="container">
         {%block content%}   {%endblock%}
     </div>
+
 </body>
 </html>
 

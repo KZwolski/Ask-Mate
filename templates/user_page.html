@@ -1,4 +1,6 @@
 {%extends "layout.html"%}
+{% block logo %}   <div id="logo"><h1>User {{ user[0]['username'] }}</h1></div>
+{% endblock %}
 {%block content%}
     <h1>User {{ user[0]['username'] }}</h1>
     <a href="/">Return to Main Page</a><br><br>

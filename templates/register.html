@@ -1,32 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register</title>
-    <style>
-        body {
-            background-color: lightblue;
-            text-align: center;
-            }
-        p {
-            font-family: verdana;
-            font-size: 20px;
-            }
-	</style>
-</head>
-<body>
+{%extends "layout.html"%}
 
-<div class="register">
-  <div class="heading">
-    <h2>Register new account</h2>
-      <form action="" method="POST">
-          <input type="text" name="register-username" placeholder="Your username" required><br>
-          <input type="email" name="register-email" placeholder="Your email" required><br>
-          <input type="password" name="register-password" placeholder="Password" required><br>
-          <button type="submit">Sign up!</button>
+{%block content%}
+
+    <div id="window">
+      <form action="" method="post">
+          <label>
+              <input type="text" id="input1" placeholder="Username" name="register-username" >
+          </label>
+          <label>
+              <input type="text" id="input1" placeholder="Email" name="register-email">
+          </label>
+          <label>
+              <input type="password" id="input1" placeholder="Password" name="register-password">
+          </label><br>
+          <input type="submit" id="input2" value="Register">
       </form>
-  </div>
- </div>
+        <p class="annoucement">Or if you already have an account:</p>
+        <a href="/login"><input type="submit" id="input2" value="Login"></a>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
 
-</body>
-</html>
+
+{%endblock%}
+
