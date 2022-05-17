@@ -105,8 +105,7 @@ def add_answer(question_id):
 @app.route("/answer/<answer_id>/delete", methods=["GET"])
 def delete_answer(answer_id):
     data_manager.delete_answer(answer_id)
-
-    return redirect("/list")
+    return redirect("/list")  # Should redirect to a question
 
 
 @app.route("/register")

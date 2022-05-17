@@ -87,17 +87,6 @@ def save_question(cursor: RealDictCursor, username, question_title, message, ima
 
 
 @connection.connection_handler
-def max_id(cursor: RealDictCursor):
-    cursor.execute("""
-                       SELECT id FROM question
-                       ORDER BY id DESC 
-                       LIMIT 1
-       """)
-    maximum_id = cursor.fetchone()
-    return maximum_id.get('id')
-
-
-@connection.connection_handler
 def delete_question(cursor: RealDictCursor, id_to_delete):
     query = '''
         DELETE FROM question WHERE id = %(id_to_delete)s
@@ -118,13 +107,20 @@ def edit_question(cursor: RealDictCursor, changed_id, question_title, message, i
 
 
 @connection.connection_handler
-def save_answer(cursor: RealDictCursor, question_id, message):
+def save_answer(cursor: RealDictCursor, question_id, message, username):
     query = '''
-        INSERT INTO answer(submission_time, vote_number, question_id, message, image)
-        VALUES (%(time)s,  %(vote_n)s, %(question_id)s, %(message)s, %(image)s)
+        INSERT INTO answer(submission_time, user_id, vote_number, question_id, message, image)
+        VALUES (
+        %(time)s,
+        (SELECT u.id FROM users u WHERE u.username = %(username)s),
+        %(vote_n)s, 
+        %(question_id)s, 
+        %(message)s, 
+        %(image)s
+        )
         '''
     cursor.execute(query, {'time': util.get_current_time(), 'vote_n': 0,
-                           'question_id': question_id, 'message': message, 'image': None})
+                           'question_id': question_id, 'message': message, 'image': None, 'username': username})
 
 
 @connection.connection_handler
