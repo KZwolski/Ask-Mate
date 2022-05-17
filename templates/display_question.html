@@ -28,6 +28,7 @@
  <table>
             <thead>
                 <tr>
+                    <th>User</th>
                     <th>ID</th>
                     <th>Submission time</th>
                     <th>Views</th>
@@ -36,6 +37,7 @@
             </thead>
             <tbody>
                 <tr>
+                    <td>{{ question.username}}</td>
                     <td>{{ question.id }}</td>
                     <td>{{ question.submission_time }}</td>
                     <td style="text-align:center;">{{ question.view_number }}</td>
