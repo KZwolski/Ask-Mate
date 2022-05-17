@@ -4,39 +4,80 @@
     <meta charset="UTF-8">
     <title>Ask Mate</title>
     <style>
-        body {
-            background-color: lightblue;
+        h1, a {
             text-align: center;
             }
+        body {
+            background-color: lightblue;
+        }
 	</style>
 </head>
 <body>
     <h1>User {{ user[0]['username'] }}</h1>
     <a href="/">Return to Main Page</a><br><br>
+    <h2>details about the user:</h2>
+    <ul>
+        <li>User ID : {{ user[0]['id'] }}</li>
+        <li>Username : {{ user[0]['username'] }}</li>
+        <li>Registration date : {{ user[0]['registration_date'] }}</li>
+        <li>Number of asked questions : {{ "" }}</li>
+        <li>Number of answers : {{ "" }}</li>
+        <li>Number of comments : {{ "" }}</li>
+        <li>reputation : {{ user[0]['reputation'] }}</li>
+    </ul>
+
+    <h2>list of all questions the user has created</h2><br>
     <table>
             <thead>
                 <tr>
-                    <td>Username</td>
-                    <td>password</td>
-                    <td>email</td>
-                    <td>is admin</td>
-                    <td>registration date</td>
-                    <td>Reputation</td>
+                    <td>Question title</td>
                 </tr>
             </thead>
             <tbody>
                 {% for r in user %}
                     <tr>
-                        <td>{{ r['username'] }}</td>
-                        <td>{{ r['password'] }}</td>
-                        <td>{{ r['email'] }}</td>
-                        <td>{{ r['admin'] }}</td>
-                        <td>{{ r['registration_date'] }}</td>
-                        <td>{{ r['reputation'] }}</td>
+                        <td>lorem ipsum ...  </td>
+
 
                     </tr>
                 {% endfor %}
             </tbody>
     </table>
+
+    <h2>list of all answers the user has created</h2><br>
+        <table>
+                <thead>
+                    <tr>
+                        <td>answer</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in user %}
+                        <tr>
+                            <td>lorem ipsum ...</td>
+
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+
+    <h2>list of all comments the user has created</h2><br>
+        <table>
+                <thead>
+                    <tr>
+                        <td>Comments</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in user %}
+                        <tr>
+                            <td>lorem ipsum ...</td>
+
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
 </body>
 </html>
