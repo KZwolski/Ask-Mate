@@ -26,9 +26,10 @@ def get_questions_sorted(cursor: RealDictCursor, sort_by, order_direction) -> li
 @connection.connection_handler
 def get_a_question(cursor: RealDictCursor, searched_id):
     query = f"""
-        SELECT *
-        FROM question
-        WHERE id = {searched_id}"""
+        SELECT q.*, u.username
+        FROM question q
+        LEFT JOIN users u ON q.user_id = u.id
+        WHERE q.id = {searched_id}"""
     cursor.execute(query)
     return cursor.fetchone()
 
@@ -70,10 +71,10 @@ def get_answers(cursor: RealDictCursor, searched_id):
 @connection.connection_handler
 def save_question(cursor: RealDictCursor, username, question_title, message, image):
     query = '''
-        INSERT INTO question(submission_time,  user_id, vote_number, title, message, image)
+        INSERT INTO question(submission_time, user_id, view_number, vote_number, title, message, image)
         VALUES (
         %(time)s, 
-        (SELECT u.username FROM users u WHERE u.username = %(username)s),
+        (SELECT u.id FROM users u WHERE u.username = %(username)s),
         %(view_n)s, 
         %(vote_n)s, 
         %(title)s,

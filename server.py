@@ -48,9 +48,6 @@ def display_question(question_id: int):
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question():
-    if 'user' not in session:
-        #                                        <---   WE COULD ADD A JS ALERT HERE
-        return redirect(url_for('index'))
     header = "Add question"
     title = "Title"
     message = "Question"
@@ -76,8 +73,8 @@ def delete_question(question_id):
 
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
-def edit_question(question_id):
-    header = "Edit question"
+def edit_question(question_id):  # To be fixed, when editing and not adding an img, the original img is removed
+    header = "Edit question"     # Also, the html form should be pre-filled with old question and title ~~Seba
     title = "Title"
     message = "Question"
     action = f"/question/{question_id}/edit"
@@ -99,7 +96,8 @@ def add_answer(question_id):
     action = f"/question/{question_id}/new-answer"
     if request.method == 'POST':
         message = request.form['message']
-        data_manager.save_answer(question_id, message)
+        username = session['user']
+        data_manager.save_answer(question_id, message, username)
         return redirect(f"/question/{question_id}")
     return render_template('add-answer.html', action=action, question_id=question_id)
 
@@ -128,7 +126,7 @@ def register_user():
     user_details['password'] = util.hash_password(request.form['register-password'])
     user_details['registration_date'] = util.get_current_time()
     if data_manager.check_if_user_exists(user_details['username'], user_details['email']):
-        flash('Username or Email already exists!')  # TO BE CHANGED INTO JS
+        flash('Username or Email already exists!')                                      # TO BE CHANGED INTO JS
         return redirect(url_for('register_page'))
     else:
         data_manager.register_user(user_details)
