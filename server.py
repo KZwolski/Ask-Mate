@@ -5,7 +5,6 @@ import data_manager
 import os
 import util
 
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static\\images'
 app.secret_key = 'dupa'
@@ -23,7 +22,6 @@ def test():
 @app.route("/")
 def index():
     last_five = data_manager.get_last_five_questions()
-    users_details = data_manager.get_users_details()
     return render_template('index.html', last_five=last_five)
 
 
@@ -81,7 +79,7 @@ def delete_question(question_id):
 
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
 def edit_question(question_id):  # To be fixed, when editing and not adding an img, the original img is removed
-    header = "Edit question"     # Also, the html form should be pre-filled with old question and title ~~Seba
+    header = "Edit question"  # Also, the html form should be pre-filled with old question and title ~~Seba
     title = "Title"
     message = "Question"
     action = f"/question/{question_id}/edit"
@@ -132,7 +130,7 @@ def register_user():
     user_details['password'] = util.hash_password(request.form['register-password'])
     user_details['registration_date'] = util.get_current_time()
     if data_manager.check_if_user_exists(user_details['username'], user_details['email']):
-        flash('Username or Email already exists!')                                      # TO BE CHANGED INTO JS
+        flash('Username or Email already exists!')  # TO BE CHANGED INTO JS
         return redirect(url_for('register_page'))
     else:
         data_manager.register_user(user_details)
@@ -159,10 +157,10 @@ def users_list():
         return body
 
 
-@app.route("/user/<user_id>")
+@app.route("/user/<user_id>", methods=["GET", "POST"])
 def user_page(user_id):
     user = data_manager.get_user_by_id(user_id)
-    return render_template('user_page.html', user=user)
+    return render_template('user-page.html', user=user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -186,9 +184,6 @@ def logout():
     session.pop("user", None)
     session.pop("id", None)
     return redirect(url_for("index"))
-
-
-
 
 
 if __name__ == '__main__':

@@ -1,18 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Ask Mate</title>
-    <style>
-        h1, a {
-            text-align: center;
-            }
-        body {
-            background-color: lightblue;
-        }
-	</style>
-</head>
-<body>
+{%extends "layout.html"%}
+{%block content%}
     <h1>User {{ user[0]['username'] }}</h1>
     <a href="/">Return to Main Page</a><br><br>
     <h2>details about the user:</h2>
@@ -79,5 +66,4 @@
                     {% endfor %}
                 </tbody>
         </table>
-</body>
-</html>
+{%endblock%}

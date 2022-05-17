@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
 	<title>Ask Mate</title>
-    <link rel="stylesheet"  href="static/style.css" type ="text/css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -29,9 +29,10 @@
                 </form>
             </div>
             <div id="account">
-                <a href="/user/{{session["id"]}}">
+                <a href="/user/{{session['id']}}">
                     <span class="material-symbols-outlined">person</span>
                 </a>
+
             </div>
             <div style="clear:both"></div>
         {%else%}

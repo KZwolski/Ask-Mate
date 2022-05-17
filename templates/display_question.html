@@ -1,28 +1,5 @@
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Question {{ question_id }}</title>
-        <style>
-            body {
-                background-color: lightblue;
-                text-align: center;
-            }
-            table, th, td {
-                border: 1px solid black;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            p {
-                font-family: verdana;
-                font-size: 20px;
-            }
-            #message span {
-                background-color: white;
-                }
-        </style>
-</head>
-<body>
+{%extends "layout.html"%}
+{%block content%}
 <p><a href="/list">Go back to list of questions</a></p>
 <p><a href="/question/{{question.id}}/delete">Delete this question</a></p>
  <table>
@@ -84,7 +61,4 @@
         </tbody>
     </table>
 {% endif %}
-
-
-</body>
-</html>
+{%endblock%}
