@@ -2,17 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ask mate</title>
-     <style>
-        body {
-            background-color: lightblue;
-            text-align: center;
-            }
-	</style>
+    <title>Ask Mate</title>
 </head>
 <body>
-    <h1>Users list</h1>
-    <a href="/">Return to Main Page</a><br>
+    <h1>User {{ user[0]['username'] }}</h1>
+    <a href="/">Return to Main Page</a><br><br>
     <table>
             <thead>
                 <tr>
@@ -25,9 +19,9 @@
                 </tr>
             </thead>
             <tbody>
-                {% for r in users_details %}
+                {% for r in user %}
                     <tr>
-                        <td><a href="/user/{{ r['id'] }}">{{ r['username'] }}</a></td>
+                        <td>{{ r['username'] }}</td>
                         <td>{{ r['password'] }}</td>
                         <td>{{ r['email'] }}</td>
                         <td>{{ r['admin'] }}</td>
@@ -38,6 +32,5 @@
                 {% endfor %}
             </tbody>
     </table>
-
 </body>
 </html>

@@ -143,8 +143,19 @@ def users_list():
     if 'user' in session:
         return render_template("users.html", users_details=users_details)
     else:
-        return "you need to log in"
-        #return "<script>alert(You are not loggin in)</script>", redirect(url_for("login"))
+        body = """
+            <script>alert("You are not logged in")</script>
+            <a style="text-align: center" href="/login">Login</a><br>
+            <a href="/register">Register</a><br>
+            <a href="/">Main manu</a>
+        """
+        return body
+
+
+@app.route("/user/<user_id>")
+def user_page(user_id):
+    user = data_manager.get_user_by_id(user_id)
+    return render_template('user_page.html', user=user)
 
 
 @app.route('/login', methods=['GET', 'POST'])

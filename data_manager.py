@@ -149,8 +149,20 @@ def check_if_user_exists(cursor: RealDictCursor, username, email):
 @connection.connection_handler
 def get_users_details(cursor):
     query = """
-        SELECT username, password, email, admin, registration_date, reputation
+        SELECT id, username, password, email, admin, registration_date, reputation
         FROM users
         ORDER BY username"""
     cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_user_by_id(cursor, id):
+    query = """
+        SELECT id, username, password, email, admin, registration_date, reputation
+        FROM users
+        WHERE id = %(id)s
+        ORDER BY username"""
+    value = {'id': id}
+    cursor.execute(query, value)
     return cursor.fetchall()
