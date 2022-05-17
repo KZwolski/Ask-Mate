@@ -59,9 +59,10 @@ def get_last_five_questions(cursor: RealDictCursor) -> list:
 @connection.connection_handler
 def get_answers(cursor: RealDictCursor, searched_id):
     query = f"""
-        SELECT *
-        FROM answer
-        WHERE question_id = {searched_id}"""
+        SELECT u.username, a.submission_time, a.vote_number, a.message, a.id
+        FROM answer as a
+        INNER JOIN users as u ON a.user_id = u.id
+        WHERE a.question_id = {searched_id}"""
     cursor.execute(query)
     return cursor.fetchall()
 
