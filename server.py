@@ -143,7 +143,11 @@ def main():
 @app.route("/users")
 def users_list():
     users_details = data_manager.get_users_details()
-    return render_template("users.html", users_details=users_details)
+    if 'user' in session:
+        return render_template("users.html", users_details=users_details)
+    else:
+        return "you need to log in"
+        #return "<script>alert(You are not loggin in)</script>", redirect(url_for("login"))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -165,6 +169,11 @@ def login():
 def logout():
     session.pop("user", None)
     return redirect(url_for("index"))
+
+
+@app.route('/user')
+def account_details():
+    return render_template('user.html')
 
 
 if __name__ == '__main__':

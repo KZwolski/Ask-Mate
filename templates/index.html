@@ -8,17 +8,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
 </head>
 <body>
+
 <div id="container">
-    <div id="logo">
+
+    <a href="/"><div id="logo">
         {% if "user" in session %}
             <h1>Welcome {{session["user"]}}, to ASK MATE!</h1>
         {%else%}
             <h1>Welcome to ASK MATE!</h1>
         {% endif %}
-    </div>
+    </div></a>
+
+
 
     <div id="menu">
         <div class="option"><a href="/list">Questions</a></div>
@@ -56,6 +59,7 @@
             <div style="clear:both"></div>
         {% endif %}
     </div>
+
     {% for question in last_five %}
     <a href=" {{ url_for('display_question', question_id=question.id) }}">
         <div class="question">
