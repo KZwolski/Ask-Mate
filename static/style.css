@@ -89,15 +89,11 @@ a:hover
     float: left;
 
 }
-#login{
+.login{
     float: right;
     margin-bottom: 10px;
 }
-#register{
-    float:right;
-    margin-bottom: 10px;
 
-}
 
 .material-symbols-outlined {
   font-variation-settings:
@@ -140,4 +136,15 @@ a:hover
 {
     height:20px;
     background-color: black;
+}
+#account
+{
+    float: right;
+    margin-bottom: 10px;
+    font-size: 30px;
+
+}
+#account:hover
+{
+    background-color: rgba(255, 255, 255, 0.24);
 }

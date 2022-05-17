@@ -14,11 +14,10 @@
 <div id="container">
     <div id="logo">
         {% if "user" in session %}
-                    <h1>Welcome {{session["user"]}}, to ASK MATE!</h1>
-                {%else%}
-                    <h1>Welcome to ASK MATE!</h1>
-                {% endif %}
-
+            <h1>Welcome {{session["user"]}}, to ASK MATE!</h1>
+        {%else%}
+            <h1>Welcome to ASK MATE!</h1>
+        {% endif %}
     </div>
 
     <div id="menu">
@@ -31,17 +30,31 @@
             </label>
             <button type="submit">Search!</button>
         </form></div>
-        <div id="login">
-            <form action="/login" method="GET">
-                <button class="button1" type="submit">Login</button>
-            </form>
-        </div>
-        <div id ="register">
-            <form action="/register" method="GET">
-                <button class="button1" type="submit">Register</button>
-            </form>
-        </div>
-        <div style="clear:both"></div>
+        {% if "user" in session %}
+            <div class="login">
+                <form action="/logout" method="GET">
+                    <button class="button1" type="submit">Logout</button>
+                </form>
+            </div>
+            <div id="account">
+                <a href ="/user">
+                    <span class="material-symbols-outlined">person</span>
+                </a>
+            </div>
+            <div style="clear:both"></div>
+        {%else%}
+            <div class="login">
+                <form action="/login" method="GET">
+                    <button class="button1" type="submit">Login</button>
+                </form>
+            </div>
+            <div class ="login">
+                <form action="/register" method="GET">
+                    <button class="button1" type="submit">Register</button>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+        {% endif %}
     </div>
     {% for question in last_five %}
     <a href=" {{ url_for('display_question', question_id=question.id) }}">
