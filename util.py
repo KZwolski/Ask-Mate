@@ -18,3 +18,4 @@ def get_current_time():
     value = datetime.utcfromtimestamp(current_time)
     date_format = f"{value:%Y-%m-%d %H:%M:%S}"
     return date_format
+

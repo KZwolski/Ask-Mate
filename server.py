@@ -5,6 +5,7 @@ import data_manager
 import os
 import util
 
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static\\images'
 app.secret_key = 'dupa'
@@ -12,6 +13,11 @@ app.secret_key = 'dupa'
 FILE = "data/question.csv"
 answer_path = "data/answer.csv"
 FIELDNAMES = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+
+
+@app.route("/test")
+def test():
+    return 'hehe' if data_manager.user_rights_to_answer(6, 22) else 'not hehe'
 
 
 @app.route("/")

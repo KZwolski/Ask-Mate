@@ -163,12 +163,33 @@ def get_users_details(cursor):
 
 
 @connection.connection_handler
-def get_user_by_id(cursor, id):
+def get_user_by_id(cursor, user_id):
     query = """
         SELECT id, username, password, email, admin, registration_date, reputation
         FROM users
         WHERE id = %(id)s
         ORDER BY username"""
-    value = {'id': id}
-    cursor.execute(query, value)
+    cursor.execute(query, {'id': user_id})
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def user_rights_to_question(cursor, user_id, question_id):
+    query = """
+        SELECT true
+        FROM question q
+        WHERE EXISTS (SELECT true FROM question q WHERE q.id = %(question_id)s AND q.user_id = %(user_id)s)
+        """
+    cursor.execute(query, {'user_id': user_id, 'question_id': question_id})
+    return cursor.fetchone()
+
+
+@connection.connection_handler
+def user_rights_to_answer(cursor, user_id, answer_id):
+    query = """
+    SELECT true
+    FROM question q
+    WHERE EXISTS (SELECT true FROM question q WHERE q.id = %(question_id)s AND q.user_id = %(user_id)s)
+    """
+    cursor.execute(query, {'user_id': user_id, 'answer_id': answer_id})
+    return cursor.fetchone()
