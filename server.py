@@ -5,23 +5,16 @@ import data_manager
 import os
 import util
 
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static\\images'
 app.secret_key = 'dupa'
-
-FILE = "data/question.csv"
-answer_path = "data/answer.csv"
-FIELDNAMES = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
-
-
-@app.route("/test")
-def test():
-    return 'hehe' if data_manager.user_rights_to_answer(6, 22) else 'not hehe'
 
 
 @app.route("/")
 def index():
     last_five = data_manager.get_last_five_questions()
+    users_details = data_manager.get_users_details()
     return render_template('index.html', last_five=last_five)
 
 
@@ -71,15 +64,22 @@ def add_question():
     return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
 
 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TO BE FIXED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 @app.route("/question/<question_id>/delete", methods=["GET"])
 def delete_question(question_id):
+    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
+        return redirect(url_for('index'))
     data_manager.delete_question(question_id)
     return redirect("/list")
 
 
+# To be fixed, when editing and not adding an img, the original img is removed
+# Also, the html form should be pre-filled with old question and title ~~Seba
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
-def edit_question(question_id):  # To be fixed, when editing and not adding an img, the original img is removed
-    header = "Edit question"  # Also, the html form should be pre-filled with old question and title ~~Seba
+def edit_question(question_id):
+    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
+        return redirect(url_for('index'))
+    header = "Edit question"
     title = "Title"
     message = "Question"
     action = f"/question/{question_id}/edit"
@@ -98,6 +98,8 @@ def edit_question(question_id):  # To be fixed, when editing and not adding an i
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def add_answer(question_id):
+    if 'user' not in session:
+        return redirect(url_for('index'))
     action = f"/question/{question_id}/new-answer"
     if request.method == 'POST':
         message = request.form['message']
@@ -109,8 +111,10 @@ def add_answer(question_id):
 
 @app.route("/answer/<answer_id>/delete", methods=["GET"])
 def delete_answer(answer_id):
+    if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):
+        return redirect(url_for('index'))
     data_manager.delete_answer(answer_id)
-    return redirect("/list")  # Should redirect to a question
+    return redirect("/list")  # <---------------------- Should redirect to a question
 
 
 @app.route("/register")
@@ -130,7 +134,7 @@ def register_user():
     user_details['password'] = util.hash_password(request.form['register-password'])
     user_details['registration_date'] = util.get_current_time()
     if data_manager.check_if_user_exists(user_details['username'], user_details['email']):
-        flash('Username or Email already exists!')  # TO BE CHANGED INTO JS
+        flash('Username or Email already exists!')                       # <---------- TO BE CHANGED INTO JS
         return redirect(url_for('register_page'))
     else:
         data_manager.register_user(user_details)
@@ -157,10 +161,10 @@ def users_list():
         return body
 
 
-@app.route("/user/<user_id>", methods=["GET", "POST"])
+@app.route("/user/<user_id>")
 def user_page(user_id):
     user = data_manager.get_user_by_id(user_id)
-    return render_template('user-page.html', user=user)
+    return render_template('user_page.html', user=user)
 
 
 @app.route('/login', methods=['GET', 'POST'])

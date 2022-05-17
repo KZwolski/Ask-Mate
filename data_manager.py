@@ -176,9 +176,7 @@ def get_user_by_id(cursor, user_id):
 @connection.connection_handler
 def user_rights_to_question(cursor, user_id, question_id):
     query = """
-        SELECT true
-        FROM question q
-        WHERE EXISTS (SELECT true FROM question q WHERE q.id = %(question_id)s AND q.user_id = %(user_id)s)
+        SELECT true FROM question q WHERE q.id = %(question_id)s AND q.user_id = %(user_id)s
         """
     cursor.execute(query, {'user_id': user_id, 'question_id': question_id})
     return cursor.fetchone()
@@ -187,9 +185,7 @@ def user_rights_to_question(cursor, user_id, question_id):
 @connection.connection_handler
 def user_rights_to_answer(cursor, user_id, answer_id):
     query = """
-    SELECT true
-    FROM question q
-    WHERE EXISTS (SELECT true FROM question q WHERE q.id = %(question_id)s AND q.user_id = %(user_id)s)
-    """
+        SELECT true FROM answer a WHERE a.id = %(answer_id)s AND a.user_id = %(user_id)s
+        """
     cursor.execute(query, {'user_id': user_id, 'answer_id': answer_id})
     return cursor.fetchone()
