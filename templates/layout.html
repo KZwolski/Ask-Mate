@@ -19,9 +19,9 @@
         <div class="option"><a href="/users">Users</a></div>
         <div id ="search"><form action="/search" method="GET">
             <label>
-                <input type="text" name="question" placeholder="search">
+                <input type="text" style="cursor:text; border-radius:5px" name="question" placeholder="search">
             </label>
-            <button type="submit">Search!</button>
+            <button style="cursor:pointer; border-radius: 5px" type="submit">Search!</button>
         </form></div>
         {% if "user" in session %}
             <div class="login">
@@ -44,7 +44,7 @@
             </div>
             <div class ="login">
                 <form action="/register" method="GET">
-                    <button class="button1" type="submit">Register</button>
+                    <button class="button1" type="submit">Sign UP</button>
                 </form>
             </div>
             <div style="clear:both"></div>

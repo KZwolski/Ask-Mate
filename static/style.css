@@ -127,6 +127,9 @@ a:hover
     background-color: rgba(255, 255, 255, 0.24);
     cursor: pointer;
 }
+.disabled {
+        pointer-events: none;
+      }
 .button1
 {
     background-color: #dac66c;
@@ -175,13 +178,13 @@ a:hover
         width:300px;
         background-color: #efefef;
         color: #666;
-        border: 2px solid #ddd;
+        border: 2px solid #000000;
         border-radius: 5px;
         font-size:20px;
         margin-bottom: 10px;
         padding:10px;
         box-sizing: border-box;
-        cursor: pointer;
+        cursor: text;
     }
 #input2{
         width:300px;
@@ -241,8 +244,8 @@ select
 {
     width:300px;
     background-color: #efefef;
-    color: #666;
-    border: 2px solid #ddd;
+    color: #000000;
+    border: 2px solid #000000;
     border-radius: 5px;
     font-size:15px;
     margin-bottom: 10px;

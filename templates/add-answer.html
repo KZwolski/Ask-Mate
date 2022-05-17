@@ -1,23 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Write a new answer for question {{ question_id }}</title>
-    <style>
-        body {
-            background-color: lightblue;
-            text-align: center;
-            }
-        p {
-            font-family: verdana;
-            font-size: 20px;
-            }
-	</style>
-</head>
-<body>
-<h1>Write a new answer for a question {{question_id}}</h1>
+{%extends "layout.html"%}
+{% block logo %}
+    <div id="logo"><h1>Write a new answer for a question {{question_id}}</h1></div>
+{% endblock %}
 
-<form action={{ action }} method="POST">
-    <textarea name="message" minlength="1" rows="15" cols="60" required></textarea><br>
-    <button type="submit">Submit answer</button>
-</form>
+{%block content%}
+    <div id="window">
+      <form action={{ action }} method="POST">
+          <textarea name="message" id ='input1' minlength="1" rows="7" cols="30" required></textarea><br>
+          <input type="submit" id="input2" value="Submit">
+      </form>
+    </div>
+
+
+{%endblock%}

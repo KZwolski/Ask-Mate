@@ -2,18 +2,19 @@
 {% block logo %}   <div id="logo"><h1>User {{ user[0]['username'] }}</h1></div>
 {% endblock %}
 {%block content%}
-    <h1>User {{ user[0]['username'] }}</h1>
-    <a href="/">Return to Main Page</a><br><br>
-    <h2>details about the user:</h2>
-    <ul>
-        <li>User ID : {{ user[0]['id'] }}</li>
-        <li>Username : {{ user[0]['username'] }}</li>
-        <li>Registration date : {{ user[0]['registration_date'] }}</li>
-        <li>Number of asked questions : {{ "" }}</li>
-        <li>Number of answers : {{ "" }}</li>
-        <li>Number of comments : {{ "" }}</li>
-        <li>reputation : {{ user[0]['reputation'] }}</li>
-    </ul>
+        <div class="question question disabled">
+        <h2>{{ user[0]['username'] }}
+            {% if user[0]['admin']==True %}
+                <span class="material-symbols-outlined">manage_accounts</span>
+                </h2>
+            {% endif %}
+        <h3>{{user[0]['email']}}</h3>
+        <span class="material-symbols-outlined">assignment_ind</span>{{ user[0]['id'] }}&emsp;
+        <span class="material-symbols-outlined">grade</span>&ensp;{{ user[0]['reputation'] }}&emsp;
+        <span class="material-symbols-outlined">quiz</span>&emsp;
+        <span class="material-symbols-outlined">forum</span>&emsp;
+        <span class="material-symbols-outlined">schedule</span>&ensp;{{user[0]['registration_date']}}
+        </div>
 
     <h2>list of all questions the user has created</h2><br>
     <table>
