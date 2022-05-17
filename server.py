@@ -17,6 +17,7 @@ FIELDNAMES = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'm
 @app.route("/")
 def index():
     last_five = data_manager.get_last_five_questions()
+    users_details = data_manager.get_users_details()
     return render_template('index.html', last_five=last_five)
 
 
@@ -167,6 +168,7 @@ def login():
             if request.form['username'] == user['username'] and util.verify_password(request.form['password'],
                                                                                      user['password']):
                 session["user"] = request.form['username']
+                session["id"] = user["id"]
                 return redirect("/")
             else:
                 error = "Invalid login attempt"
@@ -176,6 +178,7 @@ def login():
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.pop("user", None)
+    session.pop("id", None)
     return redirect(url_for("index"))
 
 
