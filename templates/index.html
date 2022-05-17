@@ -3,48 +3,59 @@
 <head>
 	<meta charset="utf-8">
 	<title>Ask Mate</title>
-    <style>
-        body {
-            background-color: lightblue;
-            text-align: center;
-            }
-        p {
-            font-family: verdana;
-            font-size: 20px;
-            }
-	</style>
+    <link rel="stylesheet"  href="static/style.css" type ="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
 </head>
 <body>
-{% if "user" in session %}
-            <h1>Welcome {{session["user"]}}, to ASK MATE!</h1>
-        {%else%}
-            <h1>Welcome to ASK MATE!</h1>
-        {% endif %}
-<form action="/login" method="GET">
-        <button type="submit">Login</button>
-    </form>
-<form action="/logout" method="GET">
-        <button type="submit">Logout</button>
-    </form>
-<a href="/list">Go to the list of questions</a><br><br>
-<a href="/add-question">Ask a question</a><br><br>
-<a href="/users">Users list</a><br><br>
+<div id="container">
+    <div id="logo">
+        {% if "user" in session %}
+                    <h1>Welcome {{session["user"]}}, to ASK MATE!</h1>
+                {%else%}
+                    <h1>Welcome to ASK MATE!</h1>
+                {% endif %}
 
-<form action="/search" method="GET">
-        <br><br>Search for question:<br>
-        <input type="text" name="question"><br>
-        <button type="submit">Search!</button>
-    </form>
-<table style="width: 100%" >
-            <br><br>
-            <tr>
-                <th>Latest questions:</th>
-            </tr>
-            {% for question in last_five %}
-            <tr>
-                <td><a href=" {{ url_for('display_question', question_id=question.id) }}">{{ question.title }}</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+    </div>
+
+    <div id="menu">
+        <div class="option"><a href="/list">Questions</a></div>
+        <div class="option"><a href="/add-question">Ask</a></div>
+        <div class="option"><a href="/users">Users</a></div>
+        <div id ="search"><form action="/search" method="GET">
+            <label>
+                <input type="text" name="question" placeholder="search">
+            </label>
+            <button type="submit">Search!</button>
+        </form></div>
+        <div id="login">
+            <form action="/login" method="GET">
+                <button class="button1" type="submit">Login</button>
+            </form>
+        </div>
+        <div id ="register">
+            <form action="/register" method="GET">
+                <button class="button1" type="submit">Register</button>
+            </form>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    {% for question in last_five %}
+    <a href=" {{ url_for('display_question', question_id=question.id) }}">
+        <div class="question">
+        <h2>{{question.title}}</h2>
+        <h3>{{question.message}}</h3>
+        <span class="material-symbols-outlined">visibility</span>&ensp;{{question.view_number}}&emsp;
+        <span class="material-symbols-outlined">trending_up</span>&ensp;{{question.vote_number}}&emsp;
+        <span class="material-symbols-outlined">schedule</span>&ensp;{{question.submission_time}}
+    </div></a>
+    {% endfor %}
+    <div id="footer"></div>
+
+</div>
+
 </body>
 

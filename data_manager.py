@@ -48,7 +48,7 @@ def search_questions(cursor, phrase):
 @connection.connection_handler
 def get_last_five_questions(cursor: RealDictCursor) -> list:
     query = """
-        SELECT submission_time, title, id
+        SELECT submission_time, title, id, view_number, vote_number,message
         FROM question
         ORDER BY submission_time DESC 
         LIMIT 5"""

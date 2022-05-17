@@ -18,11 +18,15 @@
 <h1>Please login</h1>
       <br>
       <form action="" method="post">
-        <input type="text" placeholder="Username" name="username" value="{{
-          request.form.username }}">
-         <input type="password" placeholder="Password" name="password" value="{{
-          request.form.password }}">
-        <input type="submit" value="Login">
+          <label>
+              <input type="text" placeholder="Username" name="username" value="{{
+                request.form.username }}">
+          </label>
+          <label>
+              <input type="password" placeholder="Password" name="password" value="{{
+              request.form.password }}">
+          </label>
+          <input type="submit" value="Login">
         <a href="/">Return to main Page!</a>
       </form>
       {% if error %}
