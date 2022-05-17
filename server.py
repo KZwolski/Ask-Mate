@@ -17,7 +17,7 @@ FIELDNAMES = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'm
 
 @app.route("/test")
 def test():
-    return 'hehe' if data_manager.user_rights_to_answer(6, 22) else 'not hehe'
+    return 'hehe' if data_manager.user_rights_to_question(6, 9) else 'not hehe'
 
 
 @app.route("/")
