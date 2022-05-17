@@ -182,9 +182,7 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route('/user')
-def account_details():
-    return render_template('user.html')
+
 
 
 if __name__ == '__main__':

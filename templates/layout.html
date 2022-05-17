@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<title>Ask Mate</title>
+    <link rel="stylesheet"  href="static/style.css" type ="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+
+    {%block menu%}
+    <div id="menu">
+        <div class="option"><a href="/list">Questions</a></div>
+        <div class="option"><a href="/add-question">Ask</a></div>
+        <div class="option"><a href="/users">Users</a></div>
+        <div id ="search"><form action="/search" method="GET">
+            <label>
+                <input type="text" name="question" placeholder="search">
+            </label>
+            <button type="submit">Search!</button>
+        </form></div>
+        {% if "user" in session %}
+            <div class="login">
+                <form action="/logout" method="GET">
+                    <button class="button1" type="submit">Logout</button>
+                </form>
+            </div>
+            <div id="account">
+                <a href ="/user/{username}">
+                    <span class="material-symbols-outlined">person</span>
+                </a>
+            </div>
+            <div style="clear:both"></div>
+        {%else%}
+            <div class="login">
+                <form action="/login" method="GET">
+                    <button class="button1" type="submit">Login</button>
+                </form>
+            </div>
+            <div class ="login">
+                <form action="/register" method="GET">
+                    <button class="button1" type="submit">Register</button>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+        {% endif %}
+        </div>
+        {%endblock%}
+    {%block logo%}
+    <a href="/"><div id="logo">
+        {% if "user" in session %}
+            <h1>Welcome {{session["user"]}}, to ASK MATE!</h1>
+        {%else%}
+            <h1>Welcome to ASK MATE!</h1>
+        {% endif %}
+    </div></a>
+    {%endblock%}
+    <div id="container">
+        {%block content%}   {%endblock%}
+    </div>
+
+</body>
+</html>
