@@ -10,15 +10,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static\\images'
 app.secret_key = 'dupa'
 
-FILE = "data/question.csv"
-answer_path = "data/answer.csv"
-FIELDNAMES = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
-
-
-@app.route("/test")
-def test():
-    return 'hehe' if data_manager.user_rights_to_question(6, 9) else 'not hehe'
-
 
 @app.route("/")
 def index():
@@ -75,13 +66,19 @@ def add_question():
 
 @app.route("/question/<question_id>/delete", methods=["GET"])
 def delete_question(question_id):
+    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
+        return redirect(url_for('index'))
     data_manager.delete_question(question_id)
     return redirect("/list")
 
 
+# To be fixed, when editing and not adding an img, the original img is removed
+# Also, the html form should be pre-filled with old question and title ~~Seba
 @app.route("/question/<question_id>/edit", methods=["GET", "POST"])
-def edit_question(question_id):  # To be fixed, when editing and not adding an img, the original img is removed
-    header = "Edit question"     # Also, the html form should be pre-filled with old question and title ~~Seba
+def edit_question(question_id):
+    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
+        return redirect(url_for('index'))
+    header = "Edit question"
     title = "Title"
     message = "Question"
     action = f"/question/{question_id}/edit"
@@ -100,6 +97,8 @@ def edit_question(question_id):  # To be fixed, when editing and not adding an i
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def add_answer(question_id):
+    if 'user' not in session:
+        return redirect(url_for('index'))
     action = f"/question/{question_id}/new-answer"
     if request.method == 'POST':
         message = request.form['message']
@@ -111,6 +110,8 @@ def add_answer(question_id):
 
 @app.route("/answer/<answer_id>/delete", methods=["GET"])
 def delete_answer(answer_id):
+    if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):
+        return redirect(url_for('index'))
     data_manager.delete_answer(answer_id)
     return redirect("/list")  # Should redirect to a question
 
@@ -132,7 +133,7 @@ def register_user():
     user_details['password'] = util.hash_password(request.form['register-password'])
     user_details['registration_date'] = util.get_current_time()
     if data_manager.check_if_user_exists(user_details['username'], user_details['email']):
-        flash('Username or Email already exists!')                                      # TO BE CHANGED INTO JS
+        flash('Username or Email already exists!')                       # <---------- TO BE CHANGED INTO JS
         return redirect(url_for('register_page'))
     else:
         data_manager.register_user(user_details)
@@ -186,9 +187,6 @@ def logout():
     session.pop("user", None)
     session.pop("id", None)
     return redirect(url_for("index"))
-
-
-
 
 
 if __name__ == '__main__':
