@@ -64,6 +64,7 @@ def add_question():
     return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
 
 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TO BE FIXED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 @app.route("/question/<question_id>/delete", methods=["GET"])
 def delete_question(question_id):
     if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
@@ -113,7 +114,7 @@ def delete_answer(answer_id):
     if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):
         return redirect(url_for('index'))
     data_manager.delete_answer(answer_id)
-    return redirect("/list")  # Should redirect to a question
+    return redirect("/list")  # <---------------------- Should redirect to a question
 
 
 @app.route("/register")
