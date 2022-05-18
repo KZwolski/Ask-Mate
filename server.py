@@ -42,8 +42,9 @@ def display_question(question_id: int):
     answers = data_manager.get_answers(question_id)
     comments = data_manager.get_comments(question_id)
     data_manager.edit_views(question_id)
+    edit_rights = False if 'id' not in session else data_manager.user_rights_to_question(session['id'], question_id)
     return render_template("display_question.html", question=question, answers=answers, comments=comments,
-                           edit=data_manager.user_rights_to_question(session['id'], question_id))
+                           edit=edit_rights)
 
 
 @app.route("/add-question", methods=["GET", "POST"])
