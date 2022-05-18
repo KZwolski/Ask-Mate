@@ -42,7 +42,7 @@ def display_question(question_id: int):
     answers = data_manager.get_answers(question_id)
     comments = data_manager.get_comments(question_id)
     data_manager.edit_views(question_id)
-    return render_template("display_question.html", question=question, answers=answers,comments=comments,
+    return render_template("display_question.html", question=question, answers=answers, comments=comments,
                            edit=data_manager.user_rights_to_question(session['id'], question_id))
 
 
@@ -215,6 +215,11 @@ def thumbup(question_id):
 def thumb_down(question_id):
     data_manager.thumb_down(question_id)
     return redirect(f'/question/{question_id}')
+
+
+@app.route("/x/<y>")
+def change_reputation():
+    pass
 
 
 if __name__ == '__main__':

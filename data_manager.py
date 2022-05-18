@@ -271,10 +271,10 @@ def thumb_down(cursor: RealDictCursor, question_id):
 
 
 @connection.connection_handler
-def change_reputation(cursor: RealDictCursor, user_id, value):
+def change_reputation(cursor: RealDictCursor, user_id, table, value):
     query = """
-        UPDATE users
+        UPDATE %(table)s
         SET reputation += %(value)s
         WHERE id = %(user_id)s
         """
-    cursor.execute(query, {'value': value})
+    cursor.execute(query, {'table': table, 'value': value})
