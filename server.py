@@ -42,7 +42,7 @@ def display_question(question_id: int):
     answers = data_manager.get_answers(question_id)
     comments = data_manager.get_comments(question_id)
     data_manager.edit_views(question_id)
-    return render_template("display_question.html", question=question, answers=answers,comments=comments,
+    return render_template("display_question.html", question=question, answers=answers, comments=comments,
                            edit=data_manager.user_rights_to_question(session['id'], question_id))
 
 
@@ -215,6 +215,19 @@ def thumbup(question_id):
 def thumb_down(question_id):
     data_manager.thumb_down(question_id)
     return redirect(f'/question/{question_id}')
+
+
+@app.route("/question/<question_id>/<answer_id>/new-comment", methods=["GET", "POST"])
+def add_comment(question_id, answer_id):
+    if 'user' not in session:
+        return redirect(url_for('index'))
+    action = f"/question/{question_id}/{answer_id}/new-comment"
+    if request.method == 'POST':
+        message = request.form['message']
+        username = session['user']
+        data_manager.save_comment(question_id, answer_id, message, username)
+        return redirect(f"/question/{question_id}")
+    return render_template('add-answer.html', action=action, question_id=question_id)
 
 
 if __name__ == '__main__':
