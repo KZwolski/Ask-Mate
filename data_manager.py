@@ -290,8 +290,8 @@ def thumb_down(cursor: RealDictCursor, question_id):
 def change_reputation(cursor: RealDictCursor, table, id, value):
     query = """
         UPDATE users
-        SET reputation =reputation+ %(value)s
-        FROM users, answer
+        SET reputation = reputation + %(value)s
+        FROM answer
         WHERE users.id = (SELECT answer.user_id FROM answer WHERE answer.id = %(id)s)
         """
     cursor.execute(query, {'table': table, 'id': id, 'value': value})
