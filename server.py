@@ -110,6 +110,14 @@ def add_answer(question_id):
     return render_template('add-answer.html', action=action, question_id=question_id)
 
 
+@app.route("/answer/<question_id>/<answer_id>/accept")
+def accept_answer(question_id, answer_id):
+    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
+        return redirect(url_for('index'))
+    data_manager.mark_answer_as_accepted(question_id, answer_id)
+    return redirect(f'/question/{question_id}')
+
+
 @app.route("/answer/<answer_id>/delete", methods=["GET"])
 def delete_answer(answer_id):
     if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):

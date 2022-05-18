@@ -50,6 +50,7 @@
                 <th>Vote number</th>
                 <th>Answer</th>
                 <th>Delete</th>
+                {% if edit %}<th></th>{% endif %}
             </tr>
         </thead>
         <tbody>
@@ -61,6 +62,13 @@
                  <td> {{ answer.message }}</td>
                  <td><a href="/answer/{{ answer.id }}/delete",
                      question_id="{{answer.question_id}}")>DELETE ANSWER</a></td>
+                 {% if edit and not answer.id == question.accepted_answer_id %}
+                 <td><a href="/answer/{{ question.id}}/{{ answer.id }}/accept",
+                        question_id="{{answer.question_id}}")>accept this answer</a></td>
+                 {% endif %}
+                 {% if answer.id == question.accepted_answer_id %}
+                 <td><span class="material-symbols-outlined">done_outline</span></td>
+                 {% endif %}
              </tr>
          {% endfor %}
         </tbody>
