@@ -122,6 +122,19 @@ a:hover
 
 
 }
+.question_details
+{
+    border-right:2px solid black;
+    border-left:2px solid black;
+    border-bottom:2px solid black;
+    border-top:1px solid black ;
+    margin-right: 9%;
+    margin-left: 9%;
+    margin-top: 5px;
+    text-shadow: 2px 2px 4px #000000;
+    border-radius: 20px;
+
+}
 .question:hover
 {
     background-color: rgba(255, 255, 255, 0.24);

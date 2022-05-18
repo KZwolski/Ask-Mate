@@ -1,77 +1,47 @@
 {%extends "layout.html"%}
+{% block logo %}<div id="logo"><h1>{{question.title}}</h1></div>{% endblock %}
 {%block content%}
-<p><a href="/list">Go back to list of questions</a></p>
-{% if edit %}
-    <p><a href="/question/{{question.id}}/delete">Delete this question</a></p>
-{% endif %}
 
-<table>
-    <thead>
-    <tr>
-        <th>User</th>
-        <th>ID</th>
-        <th>Submission time</th>
-        <th>Views</th>
-        <th>Votes</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>{{ question.username}}</td>
-        <td>{{ question.id }}</td>
-        <td>{{ question.submission_time }}</td>
-        <td style="text-align:center;">{{ question.view_number }}</td>
-        <td style="text-align:center;">{{ question.vote_number }}</td>
-    </tr>
-    </tbody>
-</table>
+            <div class="question_details">
+            <h2 style="text-align: center; font-size: 18px;">{{question.message}}</h2>
+            {%  if question.image %}
+            <img style="text-align: center;" src="/static/{{ question.image }}" alt="image" width="300" height="200"><br>
+            {% endif %}
+            <span class="material-symbols-outlined">visibility</span>&ensp;{{question.view_number}}&emsp;
+            <span class="material-symbols-outlined">trending_up</span>&ensp;{{question.vote_number}}&emsp;
+            <span class="material-symbols-outlined">schedule</span>&ensp;{{question.submission_time}}&emsp;
+            <a href="/question/{{ question.id }}/new-answer"><span class="material-symbols-outlined">chat</span>Comment</a>&emsp;
+            {% if session['id']==question.user_id %}
+                <a href="/question/{{ question.id }}/edit"><span class="material-symbols-outlined">edit</span>Edit</a>
+            {% else %}
+                <a href="/thumbup/{{ question.id }}"><span class="material-symbols-outlined">thumb_up_off</span></a>&emsp;
+                <a href="/thumbdown/{{ question.id }}"><span class="material-symbols-outlined">thumb_down_off</span></a>&emsp;
+            {% endif %}
+            </div>
 
-<h2>{{ question.title }}</h2>
-<p>{{ question.message }}</p>
 
-{%  if question.image %}
-    <img src="/static/{{ question.image }}" alt="image" width="300" height="200"><br>
-{% endif %}
+            <h2 style="text-align: center;">Answers:</h2>
+            {% for answer in answers %}
+            <a href=" {{ url_for('display_question', question_id=answer.id) }}">
+            <div style="margin-left: 12%;margin-right: 12%;" class="question">
+            <h2>{{ answer.title}}</h2>
+            <h3>{{ answer.message}}</h3>
+            <span class="material-symbols-outlined">trending_up</span>&ensp;{{ answer.vote_number}}&emsp;
+            <span class="material-symbols-outlined">schedule</span>&ensp;{{ answer.submission_time}}
+            </div></a>
+            {% for comment in comments %}
+                {% if comment.answer_id == answer.id %}
+                    <a href=" {{ url_for('display_question', question_id=comment.id) }}">
+                    <div style="margin-left: 15%;margin-right: 15%;" class="question">
+                    <h2>{{comment.title}}</h2>
+                    <h3>{{comment.message}}</h3>
+                    <span class="material-symbols-outlined">schedule</span>&ensp;{{comment.submission_time}}
+                    </div></a>
+                {% endif %}
+            {% endfor %}
+            {% endfor %}
 
-{% if edit %}
-    <a href="/question/{{ question.id }}/edit">EDIT question</a><br><br>
-{% endif %}
-<h3><a href="/question/{{ question.id }}/new-answer">Write an answer</a></h3>
 
-<p>Answers:</p>
-{% if answers==[] %}
-    <h1>There are no answers yet!</h1>
-{% else %}
-    <table>
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Submission time</th>
-                <th>Vote number</th>
-                <th>Answer</th>
-                <th>Delete</th>
-                {% if edit %}<th></th>{% endif %}
-            </tr>
-        </thead>
-        <tbody>
-         {% for answer in answers %}
-             <tr>
-                 <td>{{ answer.username }}</td>
-                 <td>{{ answer.submission_time }}</td>
-                 <td style="text-align:center;">{{ answer.vote_number }}</td>
-                 <td> {{ answer.message }}</td>
-                 <td><a href="/answer/{{ answer.id }}/delete",
-                     question_id="{{answer.question_id}}")>DELETE ANSWER</a></td>
-                 {% if edit and not answer.id == question.accepted_answer_id %}
-                 <td><a href="/answer/{{ question.id}}/{{ answer.id }}/accept",
-                        question_id="{{answer.question_id}}")>accept this answer</a></td>
-                 {% endif %}
-                 {% if answer.id == question.accepted_answer_id %}
-                 <td><span class="material-symbols-outlined">done_outline</span></td>
-                 {% endif %}
-             </tr>
-         {% endfor %}
-        </tbody>
-    </table>
-{% endif %}
+
+
 {%endblock%}

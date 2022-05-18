@@ -69,6 +69,17 @@ def get_answers(cursor: RealDictCursor, searched_id):
 
 
 @connection.connection_handler
+def get_comments(cursor: RealDictCursor, searched_id):
+    query = f"""
+        SELECT u.username, a.submission_time, a.answer_id, a.message, a.id
+        FROM comment as a
+        INNER JOIN users as u ON a.user_id = u.id
+        WHERE a.question_id = {searched_id}"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
 def save_question(cursor: RealDictCursor, username, question_title, message, image):
     query = '''
         INSERT INTO question(submission_time, user_id, view_number, vote_number, title, message, image)
@@ -236,6 +247,27 @@ def users_comments(cursor: RealDictCursor, user_id):
         """
     cursor.execute(query, {'user_id': user_id})
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def thumb_up(cursor: RealDictCursor, question_id):
+    query = """
+        UPDATE question
+        SET vote_number = vote_number +1
+        WHERE id =%(question_id)s
+        """
+    cursor.execute(query, {'question_id': question_id})
+
+
+@connection.connection_handler
+def thumb_down(cursor: RealDictCursor, question_id):
+    query = """
+        UPDATE question
+        SET vote_number = vote_number -1
+        WHERE id =%(question_id)s
+        """
+    cursor.execute(query, {'question_id': question_id})
+
 
 
 @connection.connection_handler
