@@ -199,3 +199,13 @@ def user_rights_to_answer(cursor, user_id, answer_id):
         """
     cursor.execute(query, {'user_id': user_id, 'answer_id': answer_id})
     return cursor.fetchone()
+
+
+@connection.connection_handler
+def mark_answer_as_accepted(cursor, question_id, answer_id):
+    query = """
+        UPDATE question
+        SET accepted_answer_id = %(answer_id)s
+        WHERE id = %(question_id)s
+        """
+    cursor.execute(query, {'question_id': question_id, 'answer_id': answer_id})

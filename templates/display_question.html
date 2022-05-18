@@ -1,36 +1,41 @@
 {%extends "layout.html"%}
 {%block content%}
 <p><a href="/list">Go back to list of questions</a></p>
-<p><a href="/question/{{question.id}}/delete">Delete this question</a></p>
- <table>
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>ID</th>
-                    <th>Submission time</th>
-                    <th>Views</th>
-                    <th>Votes</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ question.username}}</td>
-                    <td>{{ question.id }}</td>
-                    <td>{{ question.submission_time }}</td>
-                    <td style="text-align:center;">{{ question.view_number }}</td>
-                    <td style="text-align:center;">{{ question.vote_number }}</td>
-                </tr>
-            </tbody>
-        </table>
+{% if edit %}
+    <p><a href="/question/{{question.id}}/delete">Delete this question</a></p>
+{% endif %}
+
+<table>
+    <thead>
+    <tr>
+        <th>User</th>
+        <th>ID</th>
+        <th>Submission time</th>
+        <th>Views</th>
+        <th>Votes</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ question.username}}</td>
+        <td>{{ question.id }}</td>
+        <td>{{ question.submission_time }}</td>
+        <td style="text-align:center;">{{ question.view_number }}</td>
+        <td style="text-align:center;">{{ question.vote_number }}</td>
+    </tr>
+    </tbody>
+</table>
+
 <h2>{{ question.title }}</h2>
 <p>{{ question.message }}</p>
 
 {%  if question.image %}
-    <img src="/static/{{ question.image }}" alt="image" width="300" height="200">
+    <img src="/static/{{ question.image }}" alt="image" width="300" height="200"><br>
 {% endif %}
 
-
-<br><a href="/question/{{ question.id }}/edit">EDIT question</a><br><br>
+{% if edit %}
+    <a href="/question/{{ question.id }}/edit">EDIT question</a><br><br>
+{% endif %}
 <h3><a href="/question/{{ question.id }}/new-answer">Write an answer</a></h3>
 
 <p>Answers:</p>

@@ -41,7 +41,8 @@ def display_question(question_id: int):
     question = data_manager.get_a_question(question_id)
     answers = data_manager.get_answers(question_id)
     data_manager.edit_views(question_id)
-    return render_template("display_question.html", question=question, answers=answers)
+    return render_template("display_question.html", question=question, answers=answers,
+                           edit=data_manager.user_rights_to_question(session['id'], question_id))
 
 
 @app.route("/add-question", methods=["GET", "POST"])
