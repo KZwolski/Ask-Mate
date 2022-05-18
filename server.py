@@ -116,6 +116,7 @@ def accept_answer(question_id, answer_id):
     if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
         return redirect(url_for('index'))
     data_manager.mark_answer_as_accepted(question_id, answer_id)
+    data_manager.change_reputation('answer', answer_id, 5)
     return redirect(f'/question/{question_id}')
 
 
@@ -215,11 +216,6 @@ def thumbup(question_id):
 def thumb_down(question_id):
     data_manager.thumb_down(question_id)
     return redirect(f'/question/{question_id}')
-
-
-@app.route("/x/<y>")
-def change_reputation():
-    pass
 
 
 if __name__ == '__main__':
