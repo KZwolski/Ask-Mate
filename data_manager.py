@@ -145,6 +145,23 @@ def save_answer(cursor: RealDictCursor, question_id, message, username):
 
 
 @connection.connection_handler
+def save_comment(cursor: RealDictCursor, question_id, answer_id, message, username):
+    query = '''
+        INSERT INTO comment(submission_time, user_id, question_id,answer_id, message)
+        VALUES (
+        %(time)s,
+        (SELECT u.id FROM users u WHERE u.username = %(username)s), 
+        %(question_id)s,  
+        %(answer_id)s,
+        %(message)s
+        )
+        '''
+    cursor.execute(query, {'time': util.get_current_time(),
+                           'question_id': question_id, 'message': message, 'answer_id': answer_id,
+                           'username': username})
+
+
+@connection.connection_handler
 def delete_answer(cursor: RealDictCursor, id_to_delete):
     query = '''
         DELETE FROM answer WHERE id = %(id_to_delete)s
@@ -264,7 +281,7 @@ def thumb_down(cursor: RealDictCursor, question_id):
     query = """
         UPDATE question
         SET vote_number = vote_number -1
-        WHERE id = %(question_id)s
+        WHERE id =%(question_id)s
         """
     cursor.execute(query, {'question_id': question_id})
 
