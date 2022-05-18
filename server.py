@@ -5,7 +5,6 @@ import data_manager
 import os
 import util
 
-
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static\\images'
 app.secret_key = 'dupa'
@@ -25,6 +24,7 @@ def display_list():
     titles = ['ID', 'Submission Time', 'View Number', 'Vote Number', 'Title']
     if sort_by:
         question_details = data_manager.get_questions_sorted(sort_by, order)
+    print(question_details)
     return render_template('list.html', questions=question_details, titles=titles)
 
 
@@ -134,7 +134,7 @@ def register_user():
     user_details['password'] = util.hash_password(request.form['register-password'])
     user_details['registration_date'] = util.get_current_time()
     if data_manager.check_if_user_exists(user_details['username'], user_details['email']):
-        flash('Username or Email already exists!')                       # <---------- TO BE CHANGED INTO JS
+        flash('Username or Email already exists!')  # <---------- TO BE CHANGED INTO JS
         return redirect(url_for('register_page'))
     else:
         data_manager.register_user(user_details)
@@ -164,7 +164,12 @@ def users_list():
 @app.route("/user/<user_id>")
 def user_page(user_id):
     user = data_manager.get_user_by_id(user_id)
-    return render_template('user_page.html', user=user)
+    questions = data_manager.users_questions(user_id)
+    answers = data_manager.users_ans(user_id)
+    comments = data_manager.users_comments(user_id)
+    print(questions)
+    print(user_id)
+    return render_template('user_page.html', user=user, questions=questions, answers=answers, comments=comments)
 
 
 @app.route('/login', methods=['GET', 'POST'])

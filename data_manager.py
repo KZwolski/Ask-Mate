@@ -199,3 +199,31 @@ def user_rights_to_answer(cursor, user_id, answer_id):
         """
     cursor.execute(query, {'user_id': user_id, 'answer_id': answer_id})
     return cursor.fetchone()
+
+
+@connection.connection_handler
+def users_questions(cursor: RealDictCursor, user_id):
+    query = """
+        SELECT * FROM question q WHERE q.user_id = %(user_id)s;
+        """
+    cursor.execute(query, {'user_id': user_id})
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def users_ans(cursor: RealDictCursor, user_id):
+    query = """
+        SELECT * FROM answer a WHERE a.user_id = %(user_id)s;
+        """
+    cursor.execute(query, {'user_id': user_id})
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def users_comments(cursor: RealDictCursor, user_id):
+    query = """
+        SELECT * FROM comment c WHERE c.user_id = %(user_id)s;
+        """
+    cursor.execute(query, {'user_id': user_id})
+    return cursor.fetchall()
+
