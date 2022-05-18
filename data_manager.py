@@ -239,20 +239,10 @@ def users_comments(cursor: RealDictCursor, user_id):
 
 
 @connection.connection_handler
-def gain_reputation(cursor: RealDictCursor, user_id, value):
+def change_reputation(cursor: RealDictCursor, user_id, value):
     query = """
         UPDATE users
         SET reputation += %(value)s
         WHERE id = %(user_id)s
         """
     cursor.execute(query, {'value': value})
-
-
-@connection.connection_handler
-def lose_reputation(cursor: RealDictCursor, user_id):
-    query = """
-        UPDATE users
-        SET reputation -= 2
-        WHERE id = %(user_id)s
-        """
-    cursor.execute(query)
