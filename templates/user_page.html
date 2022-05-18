@@ -16,57 +16,35 @@
         <span class="material-symbols-outlined">schedule</span>&ensp;{{user[0]['registration_date']}}
         </div>
 
-    <h2>list of all questions the user has created</h2><br>
-    <table>
-            <thead>
-                <tr>
-                    <td>Question title</td>
-                </tr>
-            </thead>
-            <tbody>
-                {% for r in user %}
-                    <tr>
-                        <td>lorem ipsum ...  </td>
+    <h2 style="text-align: center;">Questions:</h2>
 
-
-                    </tr>
-                {% endfor %}
-            </tbody>
-    </table>
-
-    <h2>list of all answers the user has created</h2><br>
-        <table>
-                <thead>
-                    <tr>
-                        <td>answer</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for r in user %}
-                        <tr>
-                            <td>lorem ipsum ...</td>
-
-
-                        </tr>
-                    {% endfor %}
-                </tbody>
-        </table>
-
-    <h2>list of all comments the user has created</h2><br>
-        <table>
-                <thead>
-                    <tr>
-                        <td>Comments</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for r in user %}
-                        <tr>
-                            <td>lorem ipsum ...</td>
-
-
-                        </tr>
-                    {% endfor %}
-                </tbody>
-        </table>
+    {% for question in questions %}
+        <a href=" {{ url_for('display_question', question_id=question.id) }}">
+            <div style="margin-left: 15%;margin-right: 15%;" class="question">
+            <h2>{{question.title}}</h2>
+            <h3>{{question.message}}</h3>
+            <span class="material-symbols-outlined">visibility</span>&ensp;{{question.view_number}}&emsp;
+            <span class="material-symbols-outlined">trending_up</span>&ensp;{{question.vote_number}}&emsp;
+            <span class="material-symbols-outlined">schedule</span>&ensp;{{question.submission_time}}
+        </div></a>
+    {% endfor %}
+    <h2 style="text-align: center;">Answers:</h2>
+        {% for answer in answers %}
+        <a href=" {{ url_for('display_question', question_id=answer.id) }}">
+            <div style="margin-left: 15%;margin-right: 15%;" class="question">
+            <h2>{{ answer.title}}</h2>
+            <h3>{{ answer.message}}</h3>
+            <span class="material-symbols-outlined">trending_up</span>&ensp;{{ answer.vote_number}}&emsp;
+            <span class="material-symbols-outlined">schedule</span>&ensp;{{ answer.submission_time}}
+        </div></a>
+    {% endfor %}
+    <h2 style="text-align: center;">Comments:</h2>
+       {% for comment in comments %}
+        <a href=" {{ url_for('display_question', question_id=comment.id) }}">
+            <div style="margin-left: 15%;margin-right: 15%;" class="question">
+            <h2>{{comment.title}}</h2>
+            <h3>{{comment.message}}</h3>
+            <span class="material-symbols-outlined">schedule</span>&ensp;{{comment.submission_time}}
+        </div></a>
+    {% endfor %}
 {%endblock%}

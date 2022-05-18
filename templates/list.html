@@ -26,7 +26,7 @@
            {% for question in questions %}
         <a href=" {{ url_for('display_question', question_id=question.id) }}">
             <div class="question">
-            <h2>{{ question.id }}.{{question.title}}</h2>
+            <h2>{{question.title}}</h2>
             <h3>{{question.message}}</h3>
             <span class="material-symbols-outlined">visibility</span>&ensp;{{question.view_number}}&emsp;
             <span class="material-symbols-outlined">trending_up</span>&ensp;{{question.vote_number}}&emsp;
