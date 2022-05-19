@@ -23,23 +23,21 @@ def index():
     return render_template('index.html', last_five=last_five)
 
 
-@app.route("/list", methods=["GET", "POST"])
+@app.route("/list")
 def display_list():
     question_details = data_manager.get_questions()
     sort_by = request.args.get("order_by")
     order = request.args.get("order_direction")
-    titles = ['ID', 'Submission Time', 'View Number', 'Vote Number', 'Title']
     if sort_by:
         question_details = data_manager.get_questions_sorted(sort_by, order)
-    return render_template('list.html', questions=question_details, titles=titles)
+    return render_template('list.html', questions=question_details)
 
 
-@app.route("/search", methods=["GET", "POST"])
+@app.route("/search")
 def searched_question():
     searched = request.args.get("question")
     search_question = data_manager.search_questions(searched)
-    titles = ['ID', 'Title', 'Message']
-    return render_template('list.html', questions=search_question, titles=titles, searched=searched)
+    return render_template('list.html', questions=search_question, searched=searched)
 
 
 @app.route("/question/<question_id>")
@@ -59,22 +57,34 @@ def add_question():
         user_logout = True
         return render_template('add-question.html', user_logout=user_logout)
     else:
-        header = "Add question"
-        title = "Title"
-        message = "Question"
-        action = "/add-question"
-        if request.method == 'POST':
+        '''if request.method == 'POST':
             title = request.form['title']
-            question = request.form['question']
+            message = request.form['question']
             username = session['user']
             image_path = None
             if request.files['image']:
                 filename = secure_filename(request.files['image'].filename)
                 request.files['image'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
                 image_path = 'images/%s' % filename
-            data_manager.save_question(username, title, question, image_path)
-            return redirect("/list")
-        return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
+            data_manager.save_question(username, title, message, image_path)
+            return redirect("/list")'''
+        return render_template('add-question.html')
+
+
+@app.route("/question/<question_id>/edit", methods=["GET", "POST"])
+def edit_question(question_id):
+    if request.method == 'POST':
+        title = request.form['title']
+        message = request.form['question']
+        image_path = None
+        if request.files['image']:
+            filename = secure_filename(request.files['image'].filename)
+            request.files['image'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            image_path = 'images/%s' % filename
+        data_manager.edit_question(question_id, title, message, image_path)
+        return redirect(f'/question/{question_id}')
+    else:
+        return render_template('edit-question.html')
 
 
 @app.route("/question/<question_id>/delete", methods=["GET"])
@@ -84,28 +94,6 @@ def delete_question(question_id):
     data_manager.delete_question(question_id)
     return redirect("/list")
 
-
-# To be fixed, when editing and not adding an img, the original img is removed
-# Also, the html form should be pre-filled with old question and title ~~Seba
-@app.route("/question/<question_id>/edit", methods=["GET", "POST"])
-def edit_question(question_id):
-    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
-        return redirect(url_for('index'))
-    header = "Edit question"
-    title = "Title"
-    message = "Question"
-    action = f"/question/{question_id}/edit"
-    if request.method == 'POST':
-        title = request.form['title']
-        question = request.form['question']
-        image_path = None
-        if request.files['image']:
-            filename = secure_filename(request.files['image'].filename)
-            request.files['image'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-            image_path = 'images/%s' % filename
-        data_manager.edit_question(question_id, title, question, image_path)
-        return redirect(f"/question/{question_id}")
-    return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
 
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])

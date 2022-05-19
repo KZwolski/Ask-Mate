@@ -1,6 +1,6 @@
 {%extends "layout.html"%}
 {% block logo %}
-    <div id="logo"><h1>Add Question</h1></div>
+    <div id="logo"><h1>Edit Question</h1></div>
 {% endblock %}
 
 {%block content%}
@@ -10,11 +10,11 @@
         </script>
     {% endif %}
     <div id="window">
-      <form action="" method="POST" enctype="multipart/form-data">
+      <form action="/question/{{question_id}}/edit" method="POST" enctype="multipart/form-data">
           <label>
-              <input type="text" id="input1" name="title" placeholder='Title' required><br>
+              <input type="text" id="input1" name="title" value="{{ title }}" required><br>
           </label>
-          <textarea name="question" id="input1" cols="40" rows="5" placeholder='Question' required></textarea><br>
+          <textarea name="question" id="input1" cols="40" rows="5"  required>{{ message }}</textarea><br>
           <input id='upload_button' lang='en' type="file" name="image" accept=".jpeg,.jpg,.png,.gif" id="image" value="upload an image"><br>
           <label for="image">↑ Upload an image ↑</label>
           <input type="submit" id="input2" value="Submit">

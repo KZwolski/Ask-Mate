@@ -138,14 +138,14 @@ def delete_question(cursor: RealDictCursor, id_to_delete):
 
 
 @connection.connection_handler
-def edit_question(cursor: RealDictCursor, changed_id, question_title, message, image):
+def edit_question(cursor: RealDictCursor, question_id, question_title, message, image):
     query = '''
         UPDATE question
         SET submission_time = %(time)s, title = %(title)s, message = %(message)s, image= %(image)s
         WHERE id = %(changed_id)s
         '''
     cursor.execute(query, {'time': util.get_current_time(), 'title': question_title,
-                           'message': message, 'image': image, 'changed_id': changed_id})
+                           'message': message, 'image': image, 'changed_id': question_id})
 
 
 @connection.connection_handler
@@ -193,7 +193,7 @@ def save_comment(cursor: RealDictCursor, question_id, answer_id, message, userna
 
 
 @connection.connection_handler
-def delete_answer(cursor: RealDictCursor, answer_id,question_id):
+def delete_answer(cursor: RealDictCursor, answer_id, question_id):
     query = '''
         UPDATE comment
         SET answer_id = NULL
@@ -207,9 +207,8 @@ def delete_answer(cursor: RealDictCursor, answer_id,question_id):
         DELETE FROM answer   WHERE id = %(answer_id)s;
         DELETE FROM comment  WHERE answer_id = NULL;
         '''
-    value = {'question_id': question_id, 'answer_id':answer_id}
+    value = {'question_id': question_id, 'answer_id': answer_id}
     cursor.execute(query, value)
-
 
 
 @connection.connection_handler
@@ -347,4 +346,3 @@ def change_reputation(cursor: RealDictCursor, table, id, value):
         WHERE users.id = (SELECT answer.user_id FROM answer WHERE answer.id = %(id)s)
         """
     cursor.execute(query, {'table': table, 'id': id, 'value': value})
-
