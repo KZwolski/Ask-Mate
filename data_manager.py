@@ -244,9 +244,9 @@ def get_user_by_id(cursor, user_id):
 
 
 @connection.connection_handler
-def user_rights_to_edit(cursor, user_id, question_id, table):
+def user_rights_to_question(cursor, user_id, question_id):
     query = f"""
-        SELECT true FROM {table} t WHERE t.id = {question_id} AND t.user_id = {user_id}
+        SELECT true FROM question q WHERE q.id = {question_id} AND q.user_id = {user_id}
         """
     cursor.execute(query)
     return cursor.fetchone()

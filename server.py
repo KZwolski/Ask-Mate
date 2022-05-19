@@ -56,7 +56,7 @@ def display_question(question_id: int):
     answers = data_manager.get_answers(question_id)
     comments = data_manager.get_comments(question_id)
     data_manager.edit_views(question_id)
-    edit_rights = False if 'id' not in session else data_manager.user_rights_to_edit(session['id'], question_id,"question")
+    edit_rights = False if 'id' not in session else data_manager.user_rights_to_question(session['id'], question_id)
     return render_template("display_question.html", question=question, answers=answers, comments=comments,
                            edit=edit_rights)
 
@@ -101,7 +101,7 @@ def edit_question(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET"])
 def delete_question(question_id):
-    if 'user' not in session or not data_manager.user_rights_to_edit(session['id'], question_id, "question"):
+    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
         return redirect(url_for('index'))
     data_manager.delete_question(question_id)
     return redirect("/list")
@@ -121,6 +121,8 @@ def add_answer(question_id):
 
 @app.route("/answer/<question_id>/<answer_id>/edit")
 def edit_answer(answer_id):
+    if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):
+        return redirect(url_for('index'))
     answer = data_manager.get_an_answer_message(answer_id)
     return render_template('edit_answer.html', answer=answer)
 
@@ -134,7 +136,7 @@ def edit_answer_post(question_id, answer_id):
 
 @app.route("/answer/<question_id>/<answer_id>/<action>")
 def accept_answer(question_id, answer_id, action):
-    if 'user' not in session or not data_manager.user_rights_to_edit(session['id'], question_id,"answer"):
+    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
         return redirect(url_for('index'))
     if action == 'accept':
         data_manager.mark_answer_as_accepted(question_id, answer_id)
@@ -149,7 +151,7 @@ def accept_answer(question_id, answer_id, action):
 
 @app.route("/answer/<answer_id>/<question_id>/delete", methods=["GET"])
 def delete_answer(answer_id, question_id):
-    if 'user' not in session or not data_manager.user_rights_to_edit(session['id'], answer_id,'answer'):
+    if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):
         return redirect(url_for('index'))
     data_manager.delete_answer(answer_id, question_id)
     return redirect(f'/question/{question_id}')
