@@ -60,7 +60,7 @@ def get_last_five_questions(cursor: RealDictCursor) -> list:
 @connection.connection_handler
 def get_answers(cursor: RealDictCursor, question_id):
     query = f"""
-        SELECT u.username, a.submission_time, a.vote_number, a.message, a.id
+        SELECT u.username, a.submission_time, a.vote_number, a.message, a.id, a.user_id
         FROM answer as a
         INNER JOIN users as u ON a.user_id = u.id
         WHERE a.question_id = {question_id}"""
