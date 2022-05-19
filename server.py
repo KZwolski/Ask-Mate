@@ -6,7 +6,7 @@ import os
 import util
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'static\\images'
+app.config['UPLOAD_FOLDER'] = 'static/images'
 app.secret_key = 'dupa'
 
 
@@ -29,7 +29,7 @@ def error_message():
 
 @app.route("/")
 def index():
-    last_five = data_manager.get_last_five_questions()
+    last_five = data_manager.get_questions(limit=5)
     return render_template('index.html', last_five=last_five)
 
 
@@ -39,7 +39,7 @@ def display_list():
     sort_by = request.args.get("order_by")
     order = request.args.get("order_direction")
     if sort_by:
-        question_details = data_manager.get_questions_sorted(sort_by, order)
+        question_details = data_manager.get_questions(sort_by=sort_by, order=order)
     return render_template('list.html', questions=question_details)
 
 
@@ -56,7 +56,7 @@ def display_question(question_id: int):
     answers = data_manager.get_answers(question_id)
     comments = data_manager.get_comments(question_id)
     data_manager.edit_views(question_id)
-    edit_rights = False if 'id' not in session else data_manager.user_rights_to_question(session['id'], question_id)
+    edit_rights = False if 'id' not in session else data_manager.user_rights_to_edit(session['id'], question_id,"question")
     return render_template("display_question.html", question=question, answers=answers, comments=comments,
                            edit=edit_rights)
 
@@ -101,7 +101,7 @@ def edit_question(question_id):
 
 @app.route("/question/<question_id>/delete", methods=["GET"])
 def delete_question(question_id):
-    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
+    if 'user' not in session or not data_manager.user_rights_to_edit(session['id'], question_id, "question"):
         return redirect(url_for('index'))
     data_manager.delete_question(question_id)
     return redirect("/list")
@@ -111,13 +111,12 @@ def delete_question(question_id):
 def add_answer(question_id):
     if 'user' not in session:
         return error_message()
-    action = f"/question/{question_id}/new-answer"
     if request.method == 'POST':
         message = request.form['message']
         username = session['user']
         data_manager.save_answer(question_id, message, username)
         return redirect(f"/question/{question_id}")
-    return render_template('add-answer.html', action=action, question_id=question_id)
+    return render_template('add-answer.html', question_id=question_id)
 
 
 @app.route("/answer/<question_id>/<answer_id>/edit")
@@ -133,27 +132,24 @@ def edit_answer_post(question_id, answer_id):
     return redirect(f'/question/{question_id}')
 
 
-@app.route("/answer/<question_id>/<answer_id>/accept")
-def accept_answer(question_id, answer_id):
-    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
+@app.route("/answer/<question_id>/<answer_id>/<action>")
+def accept_answer(question_id, answer_id, action):
+    if 'user' not in session or not data_manager.user_rights_to_edit(session['id'], question_id,"answer"):
         return redirect(url_for('index'))
-    data_manager.mark_answer_as_accepted(question_id, answer_id)
-    data_manager.change_reputation('answer', answer_id, get_reputation_value('answer', accepted=True))
-    return redirect(f'/question/{question_id}')
-
-
-@app.route("/answer/<question_id>/<answer_id>/remove-accepted-answer")
-def remove_accepted_answer(question_id, answer_id):
-    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
-        return redirect(url_for('index'))
-    data_manager.unmark_accepted_answer(question_id)
-    data_manager.change_reputation('answer', answer_id, get_reputation_value('answer', negative=True, accepted=True))
+    if action == 'accept':
+        data_manager.mark_answer_as_accepted(question_id, answer_id)
+        negative = False
+    else:
+        data_manager.unmark_accepted_answer(question_id)
+        negative = True
+    data_manager.change_reputation('answer', answer_id,
+                                   get_reputation_value('answer', negative=negative, accepted=True))
     return redirect(f'/question/{question_id}')
 
 
 @app.route("/answer/<answer_id>/<question_id>/delete", methods=["GET"])
 def delete_answer(answer_id, question_id):
-    if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):
+    if 'user' not in session or not data_manager.user_rights_to_edit(session['id'], answer_id,'answer'):
         return redirect(url_for('index'))
     data_manager.delete_answer(answer_id, question_id)
     return redirect(f'/question/{question_id}')
@@ -162,7 +158,7 @@ def delete_answer(answer_id, question_id):
 @app.route("/register")
 def register_page():
     if 'user' in session:
-        flash('You need to log out first!')  # TO BE CHANGED INTO JS
+        flash('You need to log out first!')
         return redirect('/')
     else:
         return render_template('register.html')
@@ -176,11 +172,12 @@ def register_user():
     user_details['password'] = util.hash_password(request.form['register-password'])
     user_details['registration_date'] = util.get_current_time()
     if data_manager.check_if_user_exists(user_details['username'], user_details['email']):
-        flash('Username or Email already exists!')  # <---------- TO BE CHANGED INTO JS
-        return redirect(url_for('register_page'))
+        error = "Username or Email already exists!"
+        print(error)
+        return render_template("register.html", error=error)
     else:
         data_manager.register_user(user_details)
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
 
 
 @app.route("/bonus-questions")
@@ -210,16 +207,19 @@ def user_page(user_id):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
-    users = data_manager.get_users_details()
     if request.method == 'POST':
-        for user in users:
-            if request.form['username'] == user['username'] and util.verify_password(request.form['password'],
-                                                                                     user['password']):
+        if data_manager.check_if_user_can_log(request.form['username']):
+            user_details = data_manager.get_users_password(request.form['username'])
+            print(user_details)
+            print(user_details.get("password"))
+            if util.verify_password(request.form['password'], user_details.get("password")):
                 session["user"] = request.form['username']
-                session["id"] = user["id"]
+                session["id"] = user_details.get("id")
                 return redirect("/")
             else:
-                error = "Invalid login attempt"
+                error = "Invalid password"
+        else:
+            error = "Invalid login"
     return render_template('login.html', error=error)
 
 
