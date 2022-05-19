@@ -41,7 +41,9 @@
         <span style ="font-size: 20px;" class="material-symbols-outlined">chat</span>Comment
     </a>&emsp;
     {% if edit %}
-        <a href="/answer/{{ answer.id }}/{{ question.id }}/delete"><span style ="font-size: 20px;" class="material-symbols-outlined">delete_forever</span>Delete</a>
+        {% if session['id'] == answer.user_id %}
+            <a href="/answer/{{ answer.id }}/{{ question.id }}/delete"><span style ="font-size: 20px;" class="material-symbols-outlined">delete_forever</span>Delete</a>
+        {% endif %}
         {% if answer.id == question.accepted_answer_id %}
             <span class="material-symbols-outlined" style="color: red">done_outline</span>
             <a href="/answer/{{ question.id }}/{{ answer.id }}/remove-accepted-answer" style="color: red">unmark</a>
