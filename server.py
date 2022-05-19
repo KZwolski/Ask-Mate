@@ -176,7 +176,7 @@ def register_user():
         return render_template("register.html", error=error)
     else:
         data_manager.register_user(user_details)
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
 
 
 @app.route("/bonus-questions")
