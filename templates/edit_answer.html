@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block logo %} <div id="logo"><h1>Edit answer</h1></div>{% endblock %}
+{% block content %}
+
+<div id="window">
+    <form action="" method="POST">
+        <textarea name="message" id ='input1' minlength="1" rows="7" cols="30">{{ answer.message }}</textarea><br>
+        <input type="submit" id="input2" value="Submit">
+    </form>
+</div>
+
+{% endblock %}

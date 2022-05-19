@@ -126,6 +126,19 @@ def add_answer(question_id):
     return render_template('add-answer.html', action=action, question_id=question_id)
 
 
+@app.route("/answer/<question_id>/<answer_id>/edit")
+def edit_answer(question_id, answer_id):
+    answer = data_manager.get_an_answer_message(answer_id)
+    return render_template('edit_answer.html', answer=answer)
+
+
+@app.route("/answer/<question_id>/<answer_id>/edit", methods=['POST'])
+def edit_answer_post(question_id, answer_id):
+    message = request.form['message']
+    data_manager.edit_answer(answer_id, message)
+    return redirect(f'/question/{question_id}')
+
+
 @app.route("/answer/<question_id>/<answer_id>/accept")
 def accept_answer(question_id, answer_id):
     if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):

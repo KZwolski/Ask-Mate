@@ -20,8 +20,8 @@
     {% endif %}
 </div>
 
-
 <h2 style="text-align: center;">Answers:</h2>
+
 {% for answer in answers %}
 <div style="margin-left: 12%;margin-right: 12%;" class="question_details">
     <h3>{{answer.username}} : {{answer.message}}</h3>
@@ -32,27 +32,34 @@
         <a href="/answer/{{ answer.id }}/{{ question.id }}/delete"><span style ="font-size: 20px;" class="material-symbols-outlined">delete_forever</span>Delete</a>
         {% if answer.id == question.accepted_answer_id %}
             <span class="material-symbols-outlined" style="color: red">done_outline</span>
-            <a href="/answer/{{ question.id }}/{{ answer.id }}/remove-accepted-answer">remove mark</a>
+            <a href="/answer/{{ question.id }}/{{ answer.id }}/remove-accepted-answer" style="color: red">unmark</a>
         {% else %}
-            <a href="/answer/{{ question.id }}/{{ answer.id }}/accept">accept answer</a>
+            <a href="/answer/{{ question.id }}/{{ answer.id }}/accept" style="color: red">accept answer</a>
         {% endif %}
     {% else %}
         {% if answer.id == question.accepted_answer_id %}
             <span class="material-symbols-outlined" style="color: red">done_outline</span>
         {% endif %}
-        <a href="/thumbup/answer/{{ answer.id }}/{{ question.id }}"><span style ="font-size: 20px;" class="material-symbols-outlined">thumb_up_off</span></a>&emsp;
-        <a href="/thumbdown/answer/{{ answer.id }}/{{ question.id }}"><span  style ="font-size: 20px;" class="material-symbols-outlined">thumb_down_off</span></a>&emsp;
+        <a href="/thumbup/answer/{{ answer.id }}/{{ question.id }}"><span style="font-size: 20px;" class="material-symbols-outlined">thumb_up_off</span></a>&emsp;
+        <a href="/thumbdown/answer/{{ answer.id }}/{{ question.id }}"><span  style="font-size: 20px;" class="material-symbols-outlined">thumb_down_off</span></a>&emsp;
+    {% endif %}
+
+    {% if session['id'] == answer.user_id %}
+        <a href="/answer/{{ question.id }}/{{ answer.id }}/edit"><span  style ="font-size: 20px;" class="material-symbols-outlined">edit</span> edit</a>
     {% endif %}
 </div>
 
 
 {% for comment in comments %}
+
 {% if comment.answer_id == answer.id %}
 <div style="margin-left: 25%;margin-right: 25%;border-radius: 3px;" class="question_details">
     <h3>{{comment.username}} : {{comment.message}}</h3>
     <h4><span style ="font-size: 12px;"class="material-symbols-outlined">schedule</span>&ensp;{{comment.submission_time}}</h4>
 </div>
 {% endif %}
+
 {% endfor %}
+
 {% endfor %}
 {%endblock%}
