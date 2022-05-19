@@ -48,7 +48,7 @@
 
 {% for comment in comments %}
 {% if comment.answer_id == answer.id %}
-<div style="margin-left: 15%;margin-right: 40%;border-radius: 40px;" class="question_details">
+<div style="margin-left: 25%;margin-right: 25%;border-radius: 3px;" class="question_details">
     <h3>{{comment.username}} : {{comment.message}}</h3>
     <h4><span style ="font-size: 12px;"class="material-symbols-outlined">schedule</span>&ensp;{{comment.submission_time}}</h4>
 </div>

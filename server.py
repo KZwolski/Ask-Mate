@@ -242,7 +242,7 @@ def add_comment(question_id, answer_id):
     if 'user' not in session:
         body = """  <script>
                     alert("You are not logged in")
-                    window.location.href = '/login';
+                    window.location.href = '/login' 
                     </script>
                 """
         return body
