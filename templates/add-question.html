@@ -4,6 +4,11 @@
 {% endblock %}
 
 {%block content%}
+    {% if user_logout %}
+        <script>alert("You are not logged in");
+        window.location.href = '/login';
+        </script>
+    {% endif %}
     <div id="window">
       <form action={{ action }} method="POST" enctype="multipart/form-data">
           <label>

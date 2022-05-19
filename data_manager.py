@@ -123,10 +123,15 @@ def delete_question(cursor: RealDictCursor, id_to_delete):
         UPDATE comment
         SET answer_id = NULL
         WHERE question_id = %(id_to_delete)s;
-        UPDATE answer,comment
+        UPDATE comment
         SET question_id =  NULL
         WHERE question_id = %(id_to_delete)s;
-        DELETE FROM question,answer,comment WHERE id = %(id_to_delete)s;
+        UPDATE answer
+        SET question_id =  NULL
+        WHERE question_id = %(id_to_delete)s;
+        DELETE FROM question WHERE id = %(id_to_delete)s;
+        DELETE FROM answer   WHERE id = %(id_to_delete)s;
+        DELETE FROM comment  WHERE id = %(id_to_delete)s;
         '''
     value = {'id_to_delete': id_to_delete}
     cursor.execute(query, value)
@@ -188,12 +193,23 @@ def save_comment(cursor: RealDictCursor, question_id, answer_id, message, userna
 
 
 @connection.connection_handler
-def delete_answer(cursor: RealDictCursor, id_to_delete):
+def delete_answer(cursor: RealDictCursor, answer_id,question_id):
     query = '''
-        DELETE FROM answer WHERE id = %(id_to_delete)s
+        UPDATE comment
+        SET answer_id = NULL
+        WHERE question_id = %(question_id)s;
+        UPDATE comment
+        SET question_id =  NULL
+        WHERE question_id = %(question_id)s;
+        UPDATE answer
+        SET question_id =  NULL
+        WHERE question_id = %(question_id)s and id = %(answer_id)s;
+        DELETE FROM answer   WHERE id = %(answer_id)s;
+        DELETE FROM comment  WHERE answer_id = NULL;
         '''
-    value = {'id_to_delete': id_to_delete}
+    value = {'question_id': question_id, 'answer_id':answer_id}
     cursor.execute(query, value)
+
 
 
 @connection.connection_handler

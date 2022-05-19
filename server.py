@@ -55,22 +55,26 @@ def display_question(question_id: int):
 
 @app.route("/add-question", methods=["GET", "POST"])
 def add_question():
-    header = "Add question"
-    title = "Title"
-    message = "Question"
-    action = "/add-question"
-    if request.method == 'POST':
-        title = request.form['title']
-        question = request.form['question']
-        username = session['user']
-        image_path = None
-        if request.files['image']:
-            filename = secure_filename(request.files['image'].filename)
-            request.files['image'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-            image_path = 'images/%s' % filename
-        data_manager.save_question(username, title, question, image_path)
-        return redirect("/list")
-    return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
+    if 'user' not in session:
+        user_logout = True
+        return render_template('add-question.html', user_logout=user_logout)
+    else:
+        header = "Add question"
+        title = "Title"
+        message = "Question"
+        action = "/add-question"
+        if request.method == 'POST':
+            title = request.form['title']
+            question = request.form['question']
+            username = session['user']
+            image_path = None
+            if request.files['image']:
+                filename = secure_filename(request.files['image'].filename)
+                request.files['image'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+                image_path = 'images/%s' % filename
+            data_manager.save_question(username, title, question, image_path)
+            return redirect("/list")
+        return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
 
 
 @app.route("/question/<question_id>/delete", methods=["GET"])
@@ -107,7 +111,12 @@ def edit_question(question_id):
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def add_answer(question_id):
     if 'user' not in session:
-        return redirect(url_for('index'))
+        body = """  <script>
+                    alert("You are not logged in")
+                    window.location.href = '/login';
+                    </script>
+                """
+        return body
     action = f"/question/{question_id}/new-answer"
     if request.method == 'POST':
         message = request.form['message']
@@ -148,12 +157,12 @@ def remove_accepted_answer(question_id, answer_id):
     return redirect(f'/question/{question_id}')
 
 
-@app.route("/answer/<answer_id>/delete", methods=["GET"])
-def delete_answer(answer_id):
+@app.route("/answer/<answer_id>/<question_id>/delete", methods=["GET"])
+def delete_answer(answer_id, question_id):
     if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):
         return redirect(url_for('index'))
-    data_manager.delete_answer(answer_id)
-    return redirect("/list")  # <---------------------- Should redirect to a question
+    data_manager.delete_answer(answer_id, question_id)
+    return redirect(f'/question/{question_id}')  # <---------------------- Should redirect to a question
 
 
 @app.route("/register")
@@ -244,7 +253,12 @@ def thumb_down(table, id_to_update, id_to_return):
 @app.route("/question/<question_id>/<answer_id>/new-comment", methods=["GET", "POST"])
 def add_comment(question_id, answer_id):
     if 'user' not in session:
-        return redirect(url_for('index'))
+        body = """  <script>
+                    alert("You are not logged in")
+                    window.location.href = '/login';
+                    </script>
+                """
+        return body
     action = f"/question/{question_id}/{answer_id}/new-comment"
     if request.method == 'POST':
         message = request.form['message']
