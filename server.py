@@ -179,7 +179,7 @@ def users_list():
         return render_template("users.html", users_details=users_details)
     else:
         user_logout = True
-        return render_template('login.html', user_logout=user_logout)
+        return render_template('users.html', user_logout=user_logout)
 
 
 @app.route("/user/<user_id>")

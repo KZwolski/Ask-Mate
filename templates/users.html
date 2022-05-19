@@ -3,6 +3,11 @@
     <div id="logo"><h1>Users</h1></div>
 {% endblock %}
 {%block content%}
+    {% if user_logout %}
+        <script>alert("You are not logged in");
+        window.location.href = '/login';
+        </script>
+    {% endif %}
      {% for user in users_details %}
         <a href="/user/{{ user['id'] }}">
         <div class="question">
