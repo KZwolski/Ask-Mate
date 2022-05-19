@@ -58,14 +58,34 @@ def get_last_five_questions(cursor: RealDictCursor) -> list:
 
 
 @connection.connection_handler
-def get_answers(cursor: RealDictCursor, searched_id):
+def get_answers(cursor: RealDictCursor, question_id):
     query = f"""
         SELECT u.username, a.submission_time, a.vote_number, a.message, a.id
         FROM answer as a
         INNER JOIN users as u ON a.user_id = u.id
-        WHERE a.question_id = {searched_id}"""
+        WHERE a.question_id = {question_id}"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_an_answer_message(cursor: RealDictCursor, answer_id):
+    query = f"""
+        SELECT a.message
+        FROM answer a
+        WHERE a.id = {answer_id}"""
+    cursor.execute(query)
+    return cursor.fetchone()
+
+
+@connection.connection_handler
+def edit_answer(cursor: RealDictCursor, answer_id, message):
+    query = """
+        UPDATE answer
+        SET message = %(message)s
+        WHERE id = %(answer_id)s
+        """
+    cursor.execute(query, {'answer_id': answer_id, 'message': message})
 
 
 @connection.connection_handler
@@ -311,3 +331,4 @@ def change_reputation(cursor: RealDictCursor, table, id, value):
         WHERE users.id = (SELECT answer.user_id FROM answer WHERE answer.id = %(id)s)
         """
     cursor.execute(query, {'table': table, 'id': id, 'value': value})
+
