@@ -164,13 +164,8 @@ def users_list():
     if 'user' in session:
         return render_template("users.html", users_details=users_details)
     else:
-        body = """
-            <script>alert("You are not logged in")</script>
-            <a style="text-align: center" href="/login">Login</a><br>
-            <a href="/register">Register</a><br>
-            <a href="/">Main manu</a>
-        """
-        return body
+        user_logout = True
+        return render_template("login.html", user_logout=user_logout)
 
 
 @app.route("/user/<user_id>")

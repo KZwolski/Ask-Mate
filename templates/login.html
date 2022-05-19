@@ -1,7 +1,9 @@
 {%extends "layout.html"%}
 
 {%block content%}
-
+    {% if user_logout %}
+        <script>alert("You are not logged in")</script>
+    {% endif %}
     <div id="window">
       <form action="" method="post">
           <label>
