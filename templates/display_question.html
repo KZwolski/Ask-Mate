@@ -10,13 +10,23 @@
     <span class="material-symbols-outlined">visibility</span>&ensp;{{question.view_number}}&emsp;
     <span class="material-symbols-outlined">trending_up</span>&ensp;{{question.vote_number}}&emsp;
     <span class="material-symbols-outlined">schedule</span>&ensp;{{question.submission_time}}&emsp;
-    <a href="/question/{{ question.id }}/new-answer"><span class="material-symbols-outlined">chat</span>Write an answer</a>&emsp;
+    <a href="/question/{{ question.id }}/new-answer">
+        <span class="material-symbols-outlined">chat</span>Write an answer
+    </a>&emsp;
     {% if edit %}
-        <a href="/question/{{ question.id }}/edit"><span class="material-symbols-outlined">edit</span>Edit</a>
-        <a href="/question/{{ question.id }}/delete"><span class="material-symbols-outlined">delete_forever</span>Delete</a>
+        <a href="/question/{{ question.id }}/edit">
+            <span class="material-symbols-outlined">edit</span>Edit
+        </a>
+        <a href="/question/{{ question.id }}/delete">
+            <span class="material-symbols-outlined">delete_forever</span>Delete
+        </a>
     {% else %}
-        <a href="/thumbup/question/{{ question.id }}/{{ question.id }}"><span class="material-symbols-outlined">thumb_up_off</span></a>&emsp;
-        <a href="/thumbdown/question/{{ question.id }}/{{ question.id }}"><span class="material-symbols-outlined">thumb_down_off</span></a>&emsp;
+        <a href="/thumbup/question/{{ question.id }}/{{ question.id }}">
+            <span class="material-symbols-outlined">thumb_up_off</span>
+        </a>&emsp;
+        <a href="/thumbdown/question/{{ question.id }}/{{ question.id }}">
+            <span class="material-symbols-outlined">thumb_down_off</span>
+        </a>&emsp;
     {% endif %}
 </div>
 
@@ -27,9 +37,13 @@
     <h3>{{answer.username}} : {{answer.message}}</h3>
     <span style ="font-size: 20px;" class="material-symbols-outlined">trending_up</span>&ensp;{{ answer.vote_number}}&emsp;
     <span style ="font-size: 20px;" class="material-symbols-outlined">schedule</span>&ensp;{{ answer.submission_time}}
-    <a href="/question/{{question.id}}/{{answer.id}}/new-comment"><span style ="font-size: 20px;" class="material-symbols-outlined">chat</span>Comment</a>&emsp;
+    <a href="/question/{{question.id}}/{{answer.id}}/new-comment">
+        <span style ="font-size: 20px;" class="material-symbols-outlined">chat</span>Comment
+    </a>&emsp;
     {% if edit %}
-        <a href="/answer/{{ answer.id }}/{{ question.id }}/delete"><span style ="font-size: 20px;" class="material-symbols-outlined">delete_forever</span>Delete</a>
+        <a href="/answer/{{ answer.id }}/{{ question.id }}/delete">
+            <span style ="font-size: 20px;" class="material-symbols-outlined">delete_forever</span>Delete
+        </a>
         {% if answer.id == question.accepted_answer_id %}
             <span class="material-symbols-outlined" style="color: red">done_outline</span>
             <a href="/answer/{{ question.id }}/{{ answer.id }}/remove-accepted-answer" style="color: red">unmark</a>
@@ -40,12 +54,18 @@
         {% if answer.id == question.accepted_answer_id %}
             <span class="material-symbols-outlined" style="color: red">done_outline</span>
         {% endif %}
-        <a href="/thumbup/answer/{{ answer.id }}/{{ question.id }}"><span style="font-size: 20px;" class="material-symbols-outlined">thumb_up_off</span></a>&emsp;
-        <a href="/thumbdown/answer/{{ answer.id }}/{{ question.id }}"><span  style="font-size: 20px;" class="material-symbols-outlined">thumb_down_off</span></a>&emsp;
+        <a href="/thumbup/answer/{{ answer.id }}/{{ question.id }}">
+            <span style="font-size: 20px;" class="material-symbols-outlined">thumb_up_off</span>
+        </a>&emsp;
+        <a href="/thumbdown/answer/{{ answer.id }}/{{ question.id }}">
+            <span  style="font-size: 20px;" class="material-symbols-outlined">thumb_down_off</span>
+        </a>&emsp;
     {% endif %}
 
     {% if session['id'] == answer.user_id %}
-        <a href="/answer/{{ question.id }}/{{ answer.id }}/edit"><span  style ="font-size: 20px;" class="material-symbols-outlined">edit</span> edit</a>
+        <a href="/answer/{{ question.id }}/{{ answer.id }}/edit">
+            <span  style ="font-size: 20px;" class="material-symbols-outlined">edit</span> edit
+        </a>
     {% endif %}
 </div>
 
@@ -55,7 +75,9 @@
 {% if comment.answer_id == answer.id %}
 <div style="margin-left: 25%;margin-right: 25%;border-radius: 3px;" class="question_details">
     <h3>{{comment.username}} : {{comment.message}}</h3>
-    <h4><span style ="font-size: 12px;"class="material-symbols-outlined">schedule</span>&ensp;{{comment.submission_time}}</h4>
+    <h4>
+        <span style ="font-size: 12px;"class="material-symbols-outlined">schedule</span>&ensp;{{comment.submission_time}}
+    </h4>
 </div>
 {% endif %}
 

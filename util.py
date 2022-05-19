@@ -1,4 +1,3 @@
-import connection
 from datetime import datetime, timezone
 import bcrypt
 
