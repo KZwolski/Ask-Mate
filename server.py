@@ -17,6 +17,15 @@ def get_reputation_value(table, negative=False, accepted=False):
     return values[table] if not negative else values[table] * -1
 
 
+def error_message():
+    body = """  <script>
+                        alert("You are not logged in")
+                        window.location.href = '/login' 
+                        </script>
+                    """
+    return body
+
+
 @app.route("/")
 def index():
     last_five = data_manager.get_last_five_questions()
@@ -97,16 +106,10 @@ def delete_question(question_id):
     return redirect("/list")
 
 
-
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def add_answer(question_id):
     if 'user' not in session:
-        body = """  <script>
-                    alert("You are not logged in")
-                    window.location.href = '/login';
-                    </script>
-                """
-        return body
+        return error_message()
     action = f"/question/{question_id}/new-answer"
     if request.method == 'POST':
         message = request.form['message']
@@ -243,12 +246,7 @@ def thumb_down(table, id_to_update, id_to_return):
 @app.route("/question/<question_id>/<answer_id>/new-comment", methods=["GET", "POST"])
 def add_comment(question_id, answer_id):
     if 'user' not in session:
-        body = """  <script>
-                    alert("You are not logged in")
-                    window.location.href = '/login' 
-                    </script>
-                """
-        return body
+        return error_message()
     action = f"/question/{question_id}/{answer_id}/new-comment"
     if request.method == 'POST':
         message = request.form['message']
