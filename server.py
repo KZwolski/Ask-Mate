@@ -10,6 +10,13 @@ app.config['UPLOAD_FOLDER'] = 'static\\images'
 app.secret_key = 'dupa'
 
 
+def get_reputation_value(table, negative=False, accepted=False):
+    if accepted:
+        return 15 if not negative else -15
+    values = {'answer': 10, 'question': 5}
+    return values[table] if not negative else values[table] * -1
+
+
 @app.route("/")
 def index():
     last_five = data_manager.get_last_five_questions()
@@ -124,7 +131,7 @@ def accept_answer(question_id, answer_id):
     if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
         return redirect(url_for('index'))
     data_manager.mark_answer_as_accepted(question_id, answer_id)
-    data_manager.change_reputation('answer', answer_id, 5)
+    data_manager.change_reputation('answer', answer_id, get_reputation_value('answer', accepted=True))
     return redirect(f'/question/{question_id}')
 
 
@@ -133,7 +140,7 @@ def remove_accepted_answer(question_id, answer_id):
     if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
         return redirect(url_for('index'))
     data_manager.unmark_accepted_answer(question_id)
-    data_manager.change_reputation('answer', answer_id, -5)
+    data_manager.change_reputation('answer', answer_id, get_reputation_value('answer', negative=True, accepted=True))
     return redirect(f'/question/{question_id}')
 
 
@@ -190,8 +197,6 @@ def user_page(user_id):
     questions = data_manager.users_questions(user_id)
     answers = data_manager.users_ans(user_id)
     comments = data_manager.users_comments(user_id)
-    print(questions)
-    print(user_id)
     return render_template('user_page.html', user=user, questions=questions, answers=answers, comments=comments)
 
 
@@ -219,14 +224,16 @@ def logout():
 
 
 @app.route('/thumbup/<table>/<id_to_update>/<id_to_return>')
-def thumbup(table, id_to_update, id_to_return):
+def thumb_up(table, id_to_update, id_to_return):
     data_manager.thumb_up(table, id_to_update)
+    data_manager.change_reputation(table, id_to_update, get_reputation_value(table))
     return redirect(f'/question/{id_to_return}')
 
 
 @app.route('/thumbdown/<table>/<id_to_update>/<id_to_return>')
 def thumb_down(table, id_to_update, id_to_return):
     data_manager.thumb_down(table, id_to_update)
+    data_manager.change_reputation(table, id_to_update, get_reputation_value(table, negative=True))
     return redirect(f'/question/{id_to_return}')
 
 
