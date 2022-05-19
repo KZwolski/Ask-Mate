@@ -57,7 +57,7 @@ def add_question():
         user_logout = True
         return render_template('add-question.html', user_logout=user_logout)
     else:
-        '''if request.method == 'POST':
+        if request.method == 'POST':
             title = request.form['title']
             message = request.form['question']
             username = session['user']
@@ -67,7 +67,7 @@ def add_question():
                 request.files['image'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
                 image_path = 'images/%s' % filename
             data_manager.save_question(username, title, message, image_path)
-            return redirect("/list")'''
+            return redirect("/list")
         return render_template('add-question.html')
 
 
@@ -84,7 +84,9 @@ def edit_question(question_id):
         data_manager.edit_question(question_id, title, message, image_path)
         return redirect(f'/question/{question_id}')
     else:
-        return render_template('edit-question.html')
+        title = data_manager.get_a_question(question_id)['title']
+        message = data_manager.get_a_question(question_id)['message']
+        return render_template('edit-question.html', title=title, message=message)
 
 
 @app.route("/question/<question_id>/delete", methods=["GET"])
