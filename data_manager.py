@@ -329,14 +329,14 @@ def thumb_down(cursor: RealDictCursor, table, question_id):
 
 
 @connection.connection_handler
-def change_reputation(cursor: RealDictCursor, table, id, value):
-    query = """
+def change_reputation(cursor: RealDictCursor, table, table_row_id, value):
+    query = f"""
         UPDATE users
         SET reputation = reputation + %(value)s
         FROM answer
-        WHERE users.id = (SELECT answer.user_id FROM answer WHERE answer.id = %(id)s)
+        WHERE users.id = (SELECT {table}.user_id FROM {table} WHERE {table}.id = %(id)s)
         """
-    cursor.execute(query, {'table': table, 'id': id, 'value': value})
+    cursor.execute(query, {'table': str(table), 'id': table_row_id, 'value': value})
 
 
 @connection.connection_handler

@@ -237,6 +237,9 @@ def logout():
 def thumb_up(table, id_to_update, id_to_return):
     data_manager.thumb_up(table, id_to_update)
     data_manager.change_reputation(table, id_to_update, get_reputation_value(table))
+    print(table)
+    print(id_to_update)
+    print(get_reputation_value(table))
     return redirect(f'/question/{id_to_return}')
 
 
