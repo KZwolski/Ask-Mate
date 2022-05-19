@@ -41,6 +41,13 @@
         <span style ="font-size: 20px;" class="material-symbols-outlined">chat</span>Comment
     </a>&emsp;
     {% if edit %}
+        <a href="/thumbup/answer/{{ answer.id }}/{{ question.id }}">
+            <span style="font-size: 20px;" class="material-symbols-outlined">thumb_up_off</span>
+        </a>&emsp;
+
+        <a href="/thumbdown/answer/{{ answer.id }}/{{ question.id }}">
+            <span  style="font-size: 20px;" class="material-symbols-outlined">thumb_down_off</span>
+        </a>&emsp;
         {% if session['id'] == answer.user_id %}
             <a href="/answer/{{ answer.id }}/{{ question.id }}/delete"><span style ="font-size: 20px;" class="material-symbols-outlined">delete_forever</span>Delete</a>
         {% endif %}
@@ -52,7 +59,13 @@
         {% endif %}
     {% else %}
         {% if session['id'] == answer.user_id %}
-            <a href="/answer/{{ answer.id }}/{{ question.id }}/delete"><span style ="font-size: 20px;" class="material-symbols-outlined">delete_forever</span>Delete</a>
+            <a href="/answer/{{ answer.id }}/{{ question.id }}/delete">
+                <span style ="font-size: 20px;" class="material-symbols-outlined">delete_forever</span> Delete
+            </a>
+
+            <a href="/answer/{{ question.id }}/{{ answer.id }}/edit">
+            <span  style ="font-size: 20px;" class="material-symbols-outlined">edit</span> edit
+            </a>
         {% endif %}
         {% if answer.id == question.accepted_answer_id %}
             <span class="material-symbols-outlined" style="color: red">done_outline</span>
@@ -65,13 +78,7 @@
         </a>&emsp;
     {% endif %}
 
-    {% if session['id'] == answer.user_id %}
-        <a href="/answer/{{ question.id }}/{{ answer.id }}/edit">
-            <span  style ="font-size: 20px;" class="material-symbols-outlined">edit</span> edit
-        </a>
-    {% endif %}
 </div>
-
 
 {% for comment in comments %}
 
