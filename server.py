@@ -24,7 +24,6 @@ def display_list():
     titles = ['ID', 'Submission Time', 'View Number', 'Vote Number', 'Title']
     if sort_by:
         question_details = data_manager.get_questions_sorted(sort_by, order)
-    print(question_details)
     return render_template('list.html', questions=question_details, titles=titles)
 
 
@@ -67,7 +66,6 @@ def add_question():
     return render_template('add-question.html', header=header, old_title=title, old_question=message, action=action)
 
 
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TO BE FIXED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 @app.route("/question/<question_id>/delete", methods=["GET"])
 def delete_question(question_id):
     if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
@@ -174,7 +172,8 @@ def users_list():
         return render_template("users.html", users_details=users_details)
     else:
         user_logout = True
-        return render_template("login.html", user_logout=user_logout)
+        return render_template('login.html', user_logout=user_logout)
+
 
 
 @app.route("/user/<user_id>")
@@ -211,16 +210,16 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route('/thumbup/<question_id>')
-def thumbup(question_id):
-    data_manager.thumb_up(question_id)
-    return redirect(f'/question/{question_id}')
+@app.route('/thumbup/<table>/<id_to_update>/<id_to_return>')
+def thumbup(table, id_to_update, id_to_return):
+    data_manager.thumb_up(table, id_to_update)
+    return redirect(f'/question/{id_to_return}')
 
 
-@app.route('/thumbdown/<question_id>')
-def thumb_down(question_id):
-    data_manager.thumb_down(question_id)
-    return redirect(f'/question/{question_id}')
+@app.route('/thumbdown/<table>/<id_to_update>/<id_to_return>')
+def thumb_down(table, id_to_update, id_to_return):
+    data_manager.thumb_down(table, id_to_update)
+    return redirect(f'/question/{id_to_return}')
 
 
 @app.route("/question/<question_id>/<answer_id>/new-comment", methods=["GET", "POST"])

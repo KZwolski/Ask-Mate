@@ -2,7 +2,9 @@
 
 {%block content%}
     {% if user_logout %}
-        <script>alert("You are not logged in")</script>
+        <script>alert("You are not logged in");
+        window.location.href = '/login';
+        </script>
     {% endif %}
     <div id="window">
       <form action="" method="post">
