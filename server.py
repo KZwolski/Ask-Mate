@@ -18,11 +18,12 @@ def get_reputation_value(table, negative=False, accepted=False):
 
 
 def error_message():
-    body = """  <script>
-                        alert("You are not logged in")
-                        window.location.href = '/login' 
-                        </script>
-                    """
+    body = """  
+        <script>
+        alert("You are not logged in")
+        window.location.href = '/login' 
+        </script>
+    """
     return body
 
 
