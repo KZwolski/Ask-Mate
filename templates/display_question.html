@@ -31,6 +31,7 @@
         <a href="/question/{{ question.id }}/edit"><span  style ="font-size: 20px;" class="material-symbols-outlined">edit</span>Edit</a>
         {% if answer.id == question.accepted_answer_id %}
             <span class="material-symbols-outlined" style="color: red">done_outline</span>
+            <a href="/answer/{{ question.id }}/{{ answer.id }}/remove-accepted-answer">remove mark</a>
         {% else %}
             <a href="/answer/{{ question.id }}/{{ answer.id }}/accept">accept answer</a>
         {% endif %}
