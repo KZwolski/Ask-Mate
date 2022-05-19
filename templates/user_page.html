@@ -9,14 +9,14 @@
                 </h2>
             {% endif %}
         <h3>{{user[0]['email']}}</h3>
-        <span class="material-symbols-outlined">assignment_ind</span>{{ user[0]['id'] }}&emsp;
+        <span class="material-symbols-outlined">assignment_ind</span>&ensp;{{ user[0]['id'] }}&emsp;
         <span class="material-symbols-outlined">grade</span>&ensp;{{ user[0]['reputation'] }}&emsp;
-        <span class="material-symbols-outlined">quiz</span>&emsp;
-        <span class="material-symbols-outlined">forum</span>&emsp;
+        <span class="material-symbols-outlined">quiz</span>&ensp;{{ number_q }}&emsp;
+        <span class="material-symbols-outlined">forum</span>&ensp;{{ number_ac }}&emsp;
         <span class="material-symbols-outlined">schedule</span>&ensp;{{user[0]['registration_date']}}
         </div>
 
-    <h2 style="text-align: center;">Questions:</h2>
+    <h2 style="text-align: center;">Latest Questions:</h2>
 
     {% for question in questions %}
         <a href=" {{ url_for('display_question', question_id=question.id) }}">
@@ -28,7 +28,7 @@
             <span class="material-symbols-outlined">schedule</span>&ensp;{{question.submission_time}}
         </div></a>
     {% endfor %}
-    <h2 style="text-align: center;">Answers:</h2>
+    <h2 style="text-align: center;">Latest Answers:</h2>
         {% for answer in answers %}
         <a href=" {{ url_for('display_question', question_id=answer.id) }}">
             <div style="margin-left: 15%;margin-right: 15%;" class="question">
@@ -38,7 +38,7 @@
             <span class="material-symbols-outlined">schedule</span>&ensp;{{ answer.submission_time}}
         </div></a>
     {% endfor %}
-    <h2 style="text-align: center;">Comments:</h2>
+    <h2 style="text-align: center;">Latest Comments:</h2>
        {% for comment in comments %}
         <a href=" {{ url_for('display_question', question_id=comment.id) }}">
             <div style="margin-left: 15%;margin-right: 15%;" class="question">

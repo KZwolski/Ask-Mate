@@ -201,7 +201,10 @@ def user_page(user_id):
     questions = data_manager.users_questions(user_id)
     answers = data_manager.users_ans(user_id)
     comments = data_manager.users_comments(user_id)
-    return render_template('user_page.html', user=user, questions=questions, answers=answers, comments=comments)
+    number_of_questions = len(questions)
+    number_of_coms_and_ans = len(answers)+len(comments)
+    return render_template('user_page.html', user=user, questions=questions[0:5], answers=answers[0:5],
+                           comments=comments[0:5], number_q=number_of_questions, number_ac=number_of_coms_and_ans)
 
 
 @app.route('/login', methods=['GET', 'POST'])

@@ -348,3 +348,5 @@ def get_users_password(cursor, user_name):
         ORDER BY username"""
     cursor.execute(query, {'user_name': user_name})
     return cursor.fetchone()
+
+
