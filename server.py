@@ -117,7 +117,7 @@ def accept_answer(question_id, answer_id):
     if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
         return redirect(url_for('index'))
     data_manager.mark_answer_as_accepted(question_id, answer_id)
-    data_manager.change_reputation('answer', answer_id, 5)
+    data_manager.change_reputation('answer', answer_id, 15)
     return redirect(f'/question/{question_id}')
 
 
@@ -126,7 +126,7 @@ def remove_accepted_answer(question_id, answer_id):
     if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
         return redirect(url_for('index'))
     data_manager.unmark_accepted_answer(question_id)
-    data_manager.change_reputation('answer', answer_id, -5)
+    data_manager.change_reputation('answer', answer_id, -15)
     return redirect(f'/question/{question_id}')
 
 
