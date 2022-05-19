@@ -7,10 +7,10 @@
     {%  if question.image %}
         <img style="text-align: center;" src="/static/{{ question.image }}" alt="image" width="300" height="200"><br>
     {% endif %}
-        <span class="material-symbols-outlined">visibility</span>&ensp;{{question.view_number}}&emsp;
-        <span class="material-symbols-outlined">trending_up</span>&ensp;{{question.vote_number}}&emsp;
-        <span class="material-symbols-outlined">schedule</span>&ensp;{{question.submission_time}}&emsp;
-        <a href="/question/{{ question.id }}/new-answer"><span class="material-symbols-outlined">chat</span>Comment</a>&emsp;
+    <span class="material-symbols-outlined">visibility</span>&ensp;{{question.view_number}}&emsp;
+    <span class="material-symbols-outlined">trending_up</span>&ensp;{{question.vote_number}}&emsp;
+    <span class="material-symbols-outlined">schedule</span>&ensp;{{question.submission_time}}&emsp;
+    <a href="/question/{{ question.id }}/new-answer"><span class="material-symbols-outlined">chat</span>Write an answer</a>&emsp;
     {% if edit %}
         <a href="/question/{{ question.id }}/edit"><span class="material-symbols-outlined">edit</span>Edit</a>
     {% else %}
@@ -31,6 +31,7 @@
         <a href="/question/{{ question.id }}/edit"><span  style ="font-size: 20px;" class="material-symbols-outlined">edit</span>Edit</a>
         {% if answer.id == question.accepted_answer_id %}
             <span class="material-symbols-outlined" style="color: red">done_outline</span>
+            <a href="/answer/{{ question.id }}/{{ answer.id }}/remove-accepted-answer">remove mark</a>
         {% else %}
             <a href="/answer/{{ question.id }}/{{ answer.id }}/accept">accept answer</a>
         {% endif %}

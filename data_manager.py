@@ -246,6 +246,16 @@ def mark_answer_as_accepted(cursor, question_id, answer_id):
 
 
 @connection.connection_handler
+def unmark_accepted_answer(cursor, question_id):
+    query = """
+        UPDATE question
+        SET accepted_answer_id = null
+        WHERE id = %(question_id)s
+        """
+    cursor.execute(query, {'question_id': question_id})
+
+
+@connection.connection_handler
 def users_questions(cursor: RealDictCursor, user_id):
     query = """
         SELECT * FROM question q WHERE q.user_id = %(user_id)s;

@@ -119,6 +119,15 @@ def accept_answer(question_id, answer_id):
     return redirect(f'/question/{question_id}')
 
 
+@app.route("/answer/<question_id>/<answer_id>/remove-accepted-answer")
+def remove_accepted_answer(question_id, answer_id):
+    if 'user' not in session or not data_manager.user_rights_to_question(session['id'], question_id):
+        return redirect(url_for('index'))
+    data_manager.unmark_accepted_answer(question_id)
+    data_manager.change_reputation('answer', answer_id, -5)
+    return redirect(f'/question/{question_id}')
+
+
 @app.route("/answer/<answer_id>/delete", methods=["GET"])
 def delete_answer(answer_id):
     if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):
@@ -162,13 +171,9 @@ def users_list():
     if 'user' in session:
         return render_template("users.html", users_details=users_details)
     else:
-        body = """
-            <script>alert("You are not logged in")</script>
-            <a style="text-align: center" href="/login">Login</a><br>
-            <a href="/register">Register</a><br>
-            <a href="/">Main manu</a>
-        """
-        return body
+        user_logout = True
+        return render_template('login.html', user_logout=user_logout)
+
 
 
 @app.route("/user/<user_id>")
