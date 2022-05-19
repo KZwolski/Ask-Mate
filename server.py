@@ -115,7 +115,7 @@ def add_answer(question_id):
 
 
 @app.route("/answer/<question_id>/<answer_id>/edit")
-def edit_answer(question_id, answer_id):
+def edit_answer(answer_id):
     answer = data_manager.get_an_answer_message(answer_id)
     return render_template('edit_answer.html', answer=answer)
 
@@ -150,7 +150,7 @@ def delete_answer(answer_id, question_id):
     if 'user' not in session or not data_manager.user_rights_to_answer(session['id'], answer_id):
         return redirect(url_for('index'))
     data_manager.delete_answer(answer_id, question_id)
-    return redirect(f'/question/{question_id}')  # <---------------------- Should redirect to a question
+    return redirect(f'/question/{question_id}')
 
 
 @app.route("/register")
