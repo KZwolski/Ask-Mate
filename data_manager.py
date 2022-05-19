@@ -4,21 +4,13 @@ import util
 
 
 @connection.connection_handler
-def get_questions(cursor: RealDictCursor) -> list:
-    query = """
-        SELECT id, submission_time, view_number, vote_number, title
-        FROM question
-        ORDER BY submission_time DESC"""
-    cursor.execute(query)
-    return cursor.fetchall()
-
-
-@connection.connection_handler
-def get_questions_sorted(cursor: RealDictCursor, sort_by, order_direction) -> list:
+def get_questions(cursor: RealDictCursor, sort_by='submission_time', order_direction='DESC', limit=1000):
     query = f"""
         SELECT id, submission_time, view_number, vote_number, title
         FROM question
-        ORDER BY {sort_by} {order_direction}"""
+        ORDER BY {sort_by} {order_direction}
+        LIMIT {limit}"""
+
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -42,19 +34,7 @@ def search_questions(cursor, phrase):
     value = {'phrase': '%' + phrase + '%'}
     cursor.execute(sql, value)
     questions = cursor.fetchall()
-
     return questions
-
-
-@connection.connection_handler
-def get_last_five_questions(cursor: RealDictCursor) -> list:
-    query = """
-        SELECT submission_time, title, id, view_number, vote_number,message
-        FROM question
-        ORDER BY submission_time DESC 
-        LIMIT 5"""
-    cursor.execute(query)
-    return cursor.fetchall()
 
 
 @connection.connection_handler
@@ -232,6 +212,17 @@ def check_if_user_exists(cursor: RealDictCursor, username, email):
 
 
 @connection.connection_handler
+def check_if_user_can_log(cursor: RealDictCursor, username):
+    query = '''
+        SELECT username
+        FROM users 
+        WHERE EXISTS (SELECT username FROM users WHERE username = %(username)s)
+        '''
+    cursor.execute(query, {'username': username})
+    return cursor.fetchone()
+
+
+@connection.connection_handler
 def get_users_details(cursor):
     query = """
         SELECT id, username, password, email, admin, registration_date, reputation
@@ -253,11 +244,11 @@ def get_user_by_id(cursor, user_id):
 
 
 @connection.connection_handler
-def user_rights_to_question(cursor, user_id, question_id):
-    query = """
-        SELECT true FROM question q WHERE q.id = %(question_id)s AND q.user_id = %(user_id)s
+def user_rights_to_edit(cursor, user_id, question_id, table):
+    query = f"""
+        SELECT true FROM {table} t WHERE t.id = {question_id} AND t.user_id = {user_id}
         """
-    cursor.execute(query, {'user_id': user_id, 'question_id': question_id})
+    cursor.execute(query)
     return cursor.fetchone()
 
 
@@ -346,3 +337,14 @@ def change_reputation(cursor: RealDictCursor, table, id, value):
         WHERE users.id = (SELECT answer.user_id FROM answer WHERE answer.id = %(id)s)
         """
     cursor.execute(query, {'table': table, 'id': id, 'value': value})
+
+
+@connection.connection_handler
+def get_users_password(cursor, user_name):
+    query = """
+        SELECT id,password
+        FROM users
+        WHERE username = %(user_name)s
+        ORDER BY username"""
+    cursor.execute(query, {'user_name': user_name})
+    return cursor.fetchone()

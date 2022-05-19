@@ -5,7 +5,7 @@
 
 {%block content%}
     <div id="window">
-      <form action={{ action }} method="POST">
+      <form action="/question/{{question_id}}/new-answer" method="POST">
           <textarea name="message" id ='input1' minlength="1" rows="7" cols="30" required></textarea><br>
           <input type="submit" id="input2" value="Submit">
       </form>
