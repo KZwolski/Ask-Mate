@@ -14,8 +14,8 @@
     {% if edit %}
         <a href="/question/{{ question.id }}/edit"><span class="material-symbols-outlined">edit</span>Edit</a>
     {% else %}
-        <a href="/thumbup/{{ question.id }}"><span class="material-symbols-outlined">thumb_up_off</span></a>&emsp;
-        <a href="/thumbdown/{{ question.id }}"><span class="material-symbols-outlined">thumb_down_off</span></a>&emsp;
+        <a href="/thumbup/question/{{ question.id }}/{{ question.id }}"><span class="material-symbols-outlined">thumb_up_off</span></a>&emsp;
+        <a href="/thumbdown/question/{{ question.id }}/{{ question.id }}"><span class="material-symbols-outlined">thumb_down_off</span></a>&emsp;
     {% endif %}
 </div>
 
@@ -38,8 +38,8 @@
         {% if answer.id == question.accepted_answer_id %}
             <span class="material-symbols-outlined" style="color: red">done_outline</span>
         {% endif %}
-        <a href="/thumbup/{{ question.id }}"><span style ="font-size: 20px;" class="material-symbols-outlined">thumb_up_off</span></a>&emsp;
-        <a href="/thumbdown/{{ question.id }}"><span  style ="font-size: 20px;" class="material-symbols-outlined">thumb_down_off</span></a>&emsp;
+        <a href="/thumbup/answer/{{ answer.id }}/{{ question.id }}"><span style ="font-size: 20px;" class="material-symbols-outlined">thumb_up_off</span></a>&emsp;
+        <a href="/thumbdown/answer/{{ answer.id }}/{{ question.id }}"><span  style ="font-size: 20px;" class="material-symbols-outlined">thumb_down_off</span></a>&emsp;
     {% endif %}
 </div>
 

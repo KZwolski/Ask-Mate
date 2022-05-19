@@ -100,7 +100,13 @@ def save_question(cursor: RealDictCursor, username, question_title, message, ima
 @connection.connection_handler
 def delete_question(cursor: RealDictCursor, id_to_delete):
     query = '''
-        DELETE FROM question WHERE id = %(id_to_delete)s
+        UPDATE comment
+        SET answer_id = NULL
+        WHERE question_id = %(id_to_delete)s;
+        UPDATE answer,comment
+        SET question_id =  NULL
+        WHERE question_id = %(id_to_delete)s;
+        DELETE FROM question,answer,comment WHERE id = %(id_to_delete)s;
         '''
     value = {'id_to_delete': id_to_delete}
     cursor.execute(query, value)
@@ -267,23 +273,23 @@ def users_comments(cursor: RealDictCursor, user_id):
 
 
 @connection.connection_handler
-def thumb_up(cursor: RealDictCursor, question_id):
-    query = """
-        UPDATE question
+def thumb_up(cursor: RealDictCursor, table, question_id):
+    query = f"""
+        UPDATE {table}
         SET vote_number = vote_number +1
-        WHERE id =%(question_id)s
+        WHERE id = {question_id}
         """
-    cursor.execute(query, {'question_id': question_id})
+    cursor.execute(query)
 
 
 @connection.connection_handler
-def thumb_down(cursor: RealDictCursor, question_id):
-    query = """
-        UPDATE question
+def thumb_down(cursor: RealDictCursor, table, question_id):
+    query = f"""
+        UPDATE {table}
         SET vote_number = vote_number -1
-        WHERE id =%(question_id)s
+        WHERE id =  {question_id}
         """
-    cursor.execute(query, {'question_id': question_id})
+    cursor.execute(query)
 
 
 @connection.connection_handler
