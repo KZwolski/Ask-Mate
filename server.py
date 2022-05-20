@@ -109,6 +109,7 @@ def delete_question(question_id):
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
 def add_answer(question_id):
+    action = f"/question/{question_id}/new-answer"
     if 'user' not in session:
         return error_message()
     if request.method == 'POST':
@@ -116,7 +117,7 @@ def add_answer(question_id):
         username = session['user']
         data_manager.save_answer(question_id, message, username)
         return redirect(f"/question/{question_id}")
-    return render_template('add-answer.html', question_id=question_id)
+    return render_template('add-answer.html', question_id=question_id, action = action)
 
 
 @app.route("/answer/<question_id>/<answer_id>/edit")
