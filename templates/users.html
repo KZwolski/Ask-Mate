@@ -1,0 +1,25 @@
+{%extends "layout.html"%}
+{% block logo %}
+    <div id="logo"><h1>Users</h1></div>
+{% endblock %}
+{%block content%}
+    {% if user_logout %}
+        <script>alert("You are not logged in");
+        window.location.href = '/login';
+        </script>
+    {% endif %}
+     {% for user in users_details %}
+        <a href="/user/{{ user['id'] }}">
+        <div class="question">
+        <h2>{{user['username']}}
+            {% if user['admin']==True %}
+                <span class="material-symbols-outlined">manage_accounts</span>
+                </h2>
+            {% endif %}
+        <h3>{{user['email']}}</h3>
+        <span class="material-symbols-outlined">grade</span>&ensp;{{user['reputation']}}&emsp;
+        <span class="material-symbols-outlined">schedule</span>&ensp;{{user['registration_date']}}
+        </div></a>
+     {% endfor %}
+
+{%endblock%}

@@ -1,0 +1,27 @@
+{%extends "layout.html"%}
+
+{%block content%}
+
+    <div id="window">
+      <form action="" method="post">
+          <label>
+              <input type="text" id="input1" placeholder="Username" name="register-username" >
+          </label>
+          <label>
+              <input type="text" id="input1" placeholder="Email" name="register-email">
+          </label>
+          <label>
+              <input type="password" id="input1" placeholder="Password" name="register-password">
+          </label><br>
+          <input type="submit" id="input2" value="Sing UP">
+      </form>
+        <p class="annoucement">Or if you already have an account:</p>
+        <a href="/login"><input type="submit" id="input2" value="Login"></a>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+
+
+{%endblock%}
+

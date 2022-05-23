@@ -1,0 +1,22 @@
+Index: .idea/dataSources.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"DataSourceManagerImpl\" format=\"xml\" multifile-model=\"true\">\r\n    <data-source source=\"LOCAL\" name=\"Ask_mate@localhost\" uuid=\"8da4f3e6-950c-4635-90e2-555db272e548\">\r\n      <driver-ref>postgresql</driver-ref>\r\n      <synchronize>true</synchronize>\r\n      <jdbc-driver>org.postgresql.Driver</jdbc-driver>\r\n      <jdbc-url>jdbc:postgresql://localhost:5432/Ask_mate</jdbc-url>\r\n      <working-dir>$ProjectFileDir$</working-dir>\r\n    </data-source>\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/.idea/dataSources.xml b/.idea/dataSources.xml
+--- a/.idea/dataSources.xml	
++++ b/.idea/dataSources.xml	
+@@ -1,11 +1,11 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+-    <data-source source="LOCAL" name="Ask_mate@localhost" uuid="8da4f3e6-950c-4635-90e2-555db272e548">
++    <data-source source="LOCAL" name="ask-mate2@localhost" uuid="8da4f3e6-950c-4635-90e2-555db272e548">
+       <driver-ref>postgresql</driver-ref>
+       <synchronize>true</synchronize>
+       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+-      <jdbc-url>jdbc:postgresql://localhost:5432/Ask_mate</jdbc-url>
++      <jdbc-url>jdbc:postgresql://localhost:5432/ask-mate2</jdbc-url>
+       <working-dir>$ProjectFileDir$</working-dir>
+     </data-source>
+   </component>

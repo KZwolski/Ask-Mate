@@ -1,0 +1,37 @@
+{%extends "layout.html"%}
+{% block logo %} <div id="logo"><h1>Questions</h1></div>{% endblock %}
+{%block content%}
+
+
+
+        <form action="/list">
+        <h2 style="text-align: center">Sort By:</h2>
+            <select name="order_by">
+                    <option value="id" >id</option>
+                    <option value="submission_time" >submission_time</option>
+                    <option value="view_number" >view_number</option>
+                    <option value="vote_number" >vote_number</option>
+                    <option value="title" >title</option>
+            </select>
+            <select name="order_direction">
+                    <option value="ASC" >Ascending</option>
+                    <option value="DESC">Descending</option>
+            </select>
+        <input type="submit" id="input3" value="Sort"></form>
+
+    <br><br>
+
+
+
+           {% for question in questions %}
+        <a href=" {{ url_for('display_question', question_id=question.id) }}">
+            <div class="question">
+            <h2>{{question.title}}</h2>
+            <h3>{{question.message}}</h3>
+            <span class="material-symbols-outlined">visibility</span>&ensp;{{question.view_number}}&emsp;
+            <span class="material-symbols-outlined">trending_up</span>&ensp;{{question.vote_number}}&emsp;
+            <span class="material-symbols-outlined">schedule</span>&ensp;{{question.submission_time}}
+        </div></a>
+        {% endfor %}
+
+{%endblock%}
